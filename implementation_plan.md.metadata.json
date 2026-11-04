@@ -1,0 +1,6 @@
+{
+  "summary": "Plan for integrating the Wishlist feature into KRYVON, including a 'Save to Wishlist' toggle on ProductCard, persistent localStorage state, a navigation link with a live counter, a dedicated Wishlist view with direct purchase/remove/launch mission actions, and empty states.",
+  "updatedAt": "2026-11-03T17:45:44.448820296Z",
+  "requestFeedback": true,
+  "userFacing": true
+}
