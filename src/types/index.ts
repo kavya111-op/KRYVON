@@ -104,7 +104,10 @@ export interface LedgerOrder {
 export interface SystemStatus {
   geminiModel: string;
   geminiConnected: boolean;
-  paypalMode: 'sandbox_live' | 'sandbox_simulated';
+  paypalMode: string;
+  paypalCredentialsConfigured?: boolean;
+  paypalCheckoutAvailable?: boolean;
   policyEngineActive: boolean;
   catalogueItemCount: number;
+  activeEnvironment?: string;
 }

@@ -77,11 +77,51 @@ export default function App() {
   const [isOrdersLoading, setIsOrdersLoading] = useState(false);
   const [systemStatus, setSystemStatus] = useState<SystemStatus | null>(null);
 
-  // Fetch initial ledger and system status
+  // Fetch initial ledger and system status & check PayPal return params
   useEffect(() => {
     fetchOrders();
     fetchSystemStatus();
+
+    // Check if returned from PayPal Sandbox redirect
+    const params = new URLSearchParams(window.location.search);
+    const paypalAction = params.get('paypal_action');
+    const token = params.get('token');
+    const productId = params.get('productId');
+
+    if (paypalAction === 'return' && token) {
+      if (window.opener) {
+        window.opener.postMessage({ type: 'PAYPAL_ORDER_APPROVED', token }, window.location.origin);
+        window.close();
+        return;
+      }
+
+      if (productId) {
+        finalizePayPalRedirect(token, productId);
+      }
+    } else if (paypalAction === 'cancel') {
+      window.history.replaceState({}, '', window.location.pathname);
+      alert('PayPal Sandbox payment authorization was cancelled.');
+    }
   }, []);
+
+  const finalizePayPalRedirect = async (paypalOrderId: string, productId: string) => {
+    try {
+      window.history.replaceState({}, '', window.location.pathname);
+      const res = await fetch('/api/paypal/capture-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ paypalOrderId, productId }),
+      });
+      const data = await res.json();
+      if (res.ok && data.order) {
+        handlePaymentSuccess(data.order);
+      } else {
+        alert(data.error || 'Could not capture PayPal payment after redirect.');
+      }
+    } catch (err: any) {
+      console.error('Failed to capture returned PayPal order:', err);
+    }
+  };
 
   const fetchOrders = async () => {
     try {
@@ -286,7 +326,7 @@ export default function App() {
     });
 
     if (verdict.status === 'BLOCKED') {
-      alert(`Purchase Blocked: ${verdict.primaryReason}`);
+      alert(`Purchase Blocked by Guardian: ${verdict.primaryReason}`);
       return;
     }
 
@@ -306,13 +346,18 @@ export default function App() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ orderId }),
       });
+      const data = await res.json();
       if (res.ok) {
         setOrders((prev) =>
           prev.map((o) => (o.orderId === orderId ? { ...o, paymentStatus: 'REFUNDED' } : o))
         );
+        alert(data.message || `Refund confirmed for order ${orderId}.`);
+      } else {
+        alert(`Refund Failed: ${data.error || 'Server rejected the refund request.'}`);
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error('Refund failed:', err);
+      alert(`Refund error: ${err.message || 'Network error occurred.'}`);
     }
   };
 
