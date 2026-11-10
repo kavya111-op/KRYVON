@@ -1,23 +1,23 @@
 # KRYVON
-### AI-Powered Autonomous Commerce
+### AI-POWERED AUTONOMOUS COMMERCE
 
-**Discover Smarter. Decide Faster. Shop Better.**
+**Discover smarter. Decide faster. Shop better.**
 
-KRYVON is an AI-powered autonomous commerce platform designed to transform traditional online shopping into an intelligent, personalized and streamlined experience.
+KRYVON is an AI-powered autonomous commerce platform designed to make online shopping more intelligent, personalized and convenient.
 
-Combining AI-powered shopping assistance, product discovery, intelligent recommendations, product comparison and payment capabilities, KRYVON aims to simplify the entire shopping journey.
+By combining AI-powered shopping assistance, intelligent product discovery, recommendations, product comparison and integrated checkout capabilities, KRYVON brings essential parts of the shopping journey together in one platform.
 
 ---
 
 ## 🚀 Vision
 
-To redefine online shopping through intelligent AI agents that understand customer needs, simplify purchasing decisions and create a seamless shopping experience.
+To redefine online shopping through intelligent AI agents that understand customer needs, simplify purchasing decisions and deliver a seamless shopping experience.
 
 ## 💡 The Problem
 
 Traditional e-commerce platforms often require customers to:
 
-- Search through hundreds of products manually.
+- Search through numerous products manually.
 - Compare specifications, features and prices across different listings.
 - Spend time identifying products that match their requirements.
 - Make purchasing decisions without personalized assistance.
@@ -25,22 +25,24 @@ Traditional e-commerce platforms often require customers to:
 
 ## ✨ Our Solution
 
-KRYVON aims to bring product discovery, comparison and purchasing assistance together in one intelligent commerce experience.
+KRYVON brings product discovery, comparison and shopping assistance together in an intelligent commerce experience.
 
-The platform is designed to help users explore products, evaluate available options and make informed purchasing decisions with AI-powered assistance.
+The platform combines an AI shopping assistant with shopping management tools and an integrated checkout workflow to help customers explore products and make informed purchasing decisions.
 
 ## ⚡ Key Features
 
-- **AI Shopping Assistant:** Conversational assistance for shopping-related queries.
-- **Smart Product Discovery:** Explore products based on customer requirements.
-- **Intelligent Recommendations:** Discover relevant shopping options.
-- **Product Comparison:** Compare products to make informed decisions.
-- **Shopping Cart:** Organize and manage selected products.
-- **PayPal Checkout Interface:** Payment workflow and checkout interface.
-- **Agent Activity Timeline:** Visualize shopping agent activities.
-- **Responsive Interface:** User-friendly shopping experience across devices.
-
-*Note: Feature availability and integration status depend on the current implementation and configuration.*
+- **AI Shopping Assistant:** Conversational shopping assistance powered by Google Gemini.
+- **Smart Product Discovery:** Explore products based on shopping requirements.
+- **Intelligent Recommendations:** Discover relevant products through AI assistance.
+- **Product Comparison:** Evaluate product options before making a purchase.
+- **Shopping Cart:** Add products, manage quantities and view cart totals.
+- **Wishlist:** Keep track of products of interest.
+- **Budget Guardian:** Monitor shopping expenditure and budget-related information.
+- **Dashboard:** Access shopping insights and platform information.
+- **Order Ledger:** Review shopping and order activity.
+- **PayPal Checkout:** Integrated PayPal payment workflow.
+- **Agent Activity Timeline:** Follow shopping assistant activities.
+- **Responsive Interface:** Designed for a convenient experience across screen sizes.
 
 ## 🛠️ Technology Stack
 
@@ -49,46 +51,56 @@ The platform is designed to help users explore products, evaluate available opti
 | Frontend | React 19 |
 | Programming Language | TypeScript |
 | Build Tool | Vite |
-| Styling | Tailwind CSS |
+| Styling | Tailwind CSS and CSS |
 | Backend | Node.js and Express.js |
-| AI Integration | Google Gemini API (@google/genai) |
+| AI Integration | Google Gemini API |
 | Animations | Motion |
 | Icons | Lucide React |
+| Payment Integration | PayPal |
 | Environment Configuration | dotenv |
 | Version Control | Git and GitHub |
-| Deployment | Netlify (planned) |
 
 ## 🏗️ Project Architecture
 
 KRYVON follows a component-based architecture.
 
-The major components include:
+Its main application layers include:
 
-1. User Interface and Navigation
-2. AI Shopping Assistant
-3. Product Discovery System
-4. Product Recommendation and Comparison
-5. Shopping Cart Management
-6. Payment and Checkout Interface
-7. Backend API Services
+1. **Frontend Interface:** React-based shopping interface and navigation.
+2. **Product Discovery:** Product catalogue and browsing experience.
+3. **AI Shopping Layer:** Gemini-powered shopping assistance.
+4. **Shopping Management:** Cart, wishlist and budget-related features.
+5. **Dashboard and Activity:** Shopping insights and activity tracking.
+6. **Payment Layer:** PayPal checkout workflow.
+7. **Backend Services:** Express-based server and API endpoints.
 
-The frontend is built using React and Vite, while Express.js provides the backend server environment.
-
-## 📂 Project Structure
+## 📁 Project Structure
 
 ```text
 KRYVON/
 │
+├── public/
+│   └── images/
+│
 ├── src/
+│   ├── assets/
+│   │   └── images/
+│   │
 │   ├── components/
+│   │   ├── CartDrawer.tsx
+│   │   ├── Dashboard.tsx
+│   │   ├── Header.tsx
 │   │   ├── Hero.tsx
 │   │   ├── ProductCard.tsx
-│   │   ├── ProductComparisonModal.tsx
-│   │   ├── PayPalCheckoutModal.tsx
-│   │   ├── PaymentSuccessModal.tsx
-│   │   └── AgentActivityTimeline.tsx
+│   │   ├── ShoppingWorkspace.tsx
+│   │   ├── WishlistSection.tsx
+│   │   ├── BudgetGuardian.tsx
+│   │   ├── OrderLedger.tsx
+│   │   └── PayPalCheckoutModal.tsx
 │   │
+│   ├── data/
 │   ├── App.tsx
+│   ├── index.css
 │   └── main.tsx
 │
 ├── server.ts
@@ -97,22 +109,22 @@ KRYVON/
 ├── package-lock.json
 ├── vite.config.ts
 ├── tsconfig.json
-├── metadata.json
-│
 ├── .env.example
 ├── .gitignore
 ├── LICENSE
 └── README.md
 ```
 
-*Additional source files and components may be added as development progresses.*
+*The structure above highlights the main application directories and components.*
 
 ## 💻 Getting Started
 
 ### Prerequisites
 
+Make sure you have the following installed:
+
 - Node.js
-- npm (Node Package Manager)
+- npm
 - Git
 - Visual Studio Code (recommended)
 
@@ -136,11 +148,18 @@ npm install
 
 ### 4. Configure Environment Variables
 
-Create a local `.env` file using `.env.example` as a reference.
+Create a `.env` file in the project root using `.env.example` as a reference.
 
-Add your required API credentials and configuration values to the local `.env` file.
+Configure the following variables:
 
-**Never upload your actual `.env` file or API credentials to GitHub.**
+```env
+GEMINI_API_KEY=your_gemini_api_key
+PAYPAL_CLIENT_ID=your_paypal_client_id
+PAYPAL_CLIENT_SECRET=your_paypal_client_secret
+PORT=3000
+```
+
+**Important:** Replace the placeholder values with your own credentials. Never commit your actual `.env` file or expose API keys and payment credentials publicly.
 
 ### 5. Start the Development Server
 
@@ -148,67 +167,52 @@ Add your required API credentials and configuration values to the local `.env` f
 npm run dev
 ```
 
+Open the local URL shown in your terminal.
+
 ### 6. Create a Production Build
 
 ```bash
 npm run build
 ```
 
-### 7. Check TypeScript
+### 7. Run TypeScript Checks
 
 ```bash
 npm run lint
 ```
 
-## 🔐 Environment Variables
+### 8. Start the Production Server
 
-KRYVON uses environment variables to manage sensitive credentials and application configuration.
-
-Examples of configuration variables may include:
-
-- `GEMINI_API_KEY`
-- `PAYPAL_CLIENT_ID`
-- `PAYPAL_CLIENT_SECRET`
-- `PORT`
-
-Refer to `.env.example` for the required variable names and configure actual credentials locally or through your hosting provider.
-
-**Security:** Never commit API keys, passwords, access tokens or private credentials to a public repository.
+```bash
+npm start
+```
 
 ## 🌐 Deployment
 
-KRYVON is being prepared for deployment.
+KRYVON is being prepared for deployment using **Render** as a Node.js Web Service.
 
-The planned deployment architecture includes:
+The production deployment uses the Express backend to serve the application and requires the appropriate Gemini and PayPal environment variables.
 
-- **Frontend:** Netlify
-- **Backend:** A Node.js-compatible hosting environment
-- **AI Services:** Google Gemini API
-- **Payment Services:** PayPal
+Deployment URL will be added here once the service is live.
 
-Backend hosting and API configuration will be finalized before the production launch.
+## 🔐 Security
 
-**Live Demo:** Coming Soon
+- API credentials are stored in environment variables.
+- The `.env` file is excluded from version control.
+- Payment credentials should never be exposed in frontend code.
+- Production environment variables should be configured through the hosting provider's secure settings.
 
-## 🔮 Future Scope
-
-- More advanced conversational AI capabilities.
-- Personalized shopping experiences.
-- Multi-agent shopping workflows.
-- Advanced product ranking and comparison.
-- Improved budget-aware recommendations.
-- Enhanced order and wishlist management.
-- Additional payment and commerce integrations.
-
-## 👩‍💻 Project Information
+## 📌 Project Information
 
 | Detail | Information |
 |---|---|
 | Project Name | KRYVON |
-| Category | Agentic AI / Autonomous Commerce |
+| Category | AI / ML and Autonomous Commerce |
 | Development | Solo Developer |
 | Developer | Kavya Gupta |
 | GitHub | [kavya111-op](https://github.com/kavya111-op) |
+| Repository | [KRYVON](https://github.com/kavya111-op/KRYVON) |
+| Deployment | Render (in progress) |
 
 ## 📜 License
 
