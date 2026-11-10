@@ -1,0 +1,1109 @@
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@1,500;1,600&display=swap');
+
+/* =========================================
+   KRYVON — HOMEPAGE DESIGN SYSTEM
+========================================= */
+
+.kryvon-home {
+  --ink: #172b3e;
+  --muted: #73808b;
+  --paper: #fbfaf7;
+  --white: #ffffff;
+  --lavender: #e9e3f4;
+  --peach: #f7e5d9;
+  --mint: #e0eee5;
+  --blue: #e3eaf4;
+  --cyan: #05a9c5;
+  --line: #e8e7e2;
+
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Instrument Sans', sans-serif;
+}
+
+.kryvon-home *,
+.kryvon-home *::before,
+.kryvon-home *::after {
+  box-sizing: border-box;
+}
+
+.kryvon-home a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.kryvon-home button {
+  font: inherit;
+}
+
+/* =========================================
+   NAVIGATION
+========================================= */
+
+.kryvon-nav {
+  width: 100%;
+  min-height: 76px;
+  padding: 0 7%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  background: rgba(255, 255, 255, 0.94);
+  border-bottom: 1px solid var(--line);
+  position: relative;
+  z-index: 10;
+}
+
+.kryvon-logo {
+  font-size: 25px;
+  font-weight: 700;
+  letter-spacing: -1.5px;
+  white-space: nowrap;
+}
+
+.kryvon-logo span {
+  color: var(--cyan);
+}
+
+.kryvon-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+}
+
+.kryvon-nav-links a {
+  color: #526174;
+  font-size: 14px;
+  font-weight: 500;
+  transition: color 0.25s ease;
+}
+
+.kryvon-nav-links a:hover {
+  color: var(--cyan);
+}
+
+.kryvon-cart {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 11px 17px;
+  color: var(--ink);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.kryvon-cart:hover {
+  background: var(--ink);
+  color: white;
+}
+
+/* =========================================
+   SHARED EDITORIAL ELEMENTS
+========================================= */
+
+.kryvon-eyebrow {
+  display: inline-block;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  line-height: 1.7;
+  color: #82909b;
+}
+
+/* =========================================
+   HERO SECTION
+========================================= */
+
+.kryvon-hero {
+  width: 100%;
+  max-width: 1440px;
+  min-height: 610px;
+  margin: 0 auto;
+  padding: 85px 9% 90px;
+  display: grid;
+  grid-template-columns: 0.95fr 1.05fr;
+  align-items: center;
+  gap: 65px;
+}
+
+.kryvon-hero-copy {
+  position: relative;
+  z-index: 2;
+}
+
+.kryvon-hero-copy h1 {
+  margin: 25px 0 24px;
+  color: var(--ink);
+  font-size: clamp(43px, 5.2vw, 70px);
+  line-height: 1.08;
+  font-weight: 600;
+  letter-spacing: -3.5px;
+}
+
+.kryvon-hero-copy h1 em,
+.product-section-heading h2 em,
+.kryvon-closing h2 em {
+  font-family: 'Playfair Display', serif;
+  font-weight: 500;
+  letter-spacing: -2px;
+}
+
+.kryvon-hero-copy > p {
+  max-width: 470px;
+  margin: 0;
+  color: #73808b;
+  font-size: 16px;
+  line-height: 1.9;
+}
+
+.kryvon-hero-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 13px;
+  margin-top: 34px;
+}
+
+.kryvon-primary-btn,
+.kryvon-secondary-btn {
+  min-height: 49px;
+  padding: 0 21px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 13px;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.kryvon-primary-btn {
+  background: var(--ink);
+  color: white !important;
+  border: 1px solid var(--ink);
+}
+
+.kryvon-primary-btn:hover {
+  background: var(--cyan);
+  border-color: var(--cyan);
+  transform: translateY(-2px);
+}
+
+.kryvon-secondary-btn {
+  border: 1px solid #d9dedf;
+  color: var(--ink);
+  background: transparent;
+}
+
+.kryvon-secondary-btn:hover {
+  border-color: var(--ink);
+  transform: translateY(-2px);
+}
+
+.kryvon-trust-note {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 34px;
+  color: #87939b;
+  font-size: 11px;
+  letter-spacing: 0.2px;
+}
+
+.trust-dot,
+.floating-label-dot {
+  width: 7px;
+  height: 7px;
+  flex-shrink: 0;
+  background: #8cbba0;
+  border-radius: 50%;
+}
+
+/* =========================================
+   HERO PRODUCT IMAGE
+========================================= */
+
+.kryvon-hero-visual {
+  min-width: 0;
+  min-height: 430px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-image-backdrop {
+  position: absolute;
+  inset: 5% 3% 4% 8%;
+  border-radius: 48% 48% 4px 4px;
+  background: #e5eee8;
+}
+
+.hero-product-image {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  max-width: 560px;
+  max-height: 460px;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+  animation: product-float 6s ease-in-out infinite;
+}
+
+.hero-image-caption {
+  position: absolute;
+  z-index: 2;
+  left: 2%;
+  bottom: 2%;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 16px 20px;
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.hero-image-caption span {
+  color: #84919b;
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 1.3px;
+}
+
+.hero-image-caption strong {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.hero-floating-label {
+  position: absolute;
+  z-index: 3;
+  top: 12%;
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 12px 16px;
+  background: white;
+  box-shadow: 0 8px 30px rgba(30, 48, 60, 0.07);
+  color: #65747e;
+  font-size: 11px;
+}
+
+/* =========================================
+   CATEGORY COLLECTIONS
+========================================= */
+
+.kryvon-product-section {
+  padding: 95px 9% 110px;
+  background: #fff;
+}
+
+.product-section-heading {
+  max-width: 1440px;
+  margin: 0 auto 45px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 25px;
+}
+
+.product-section-heading h2 {
+  margin: 16px 0 0;
+  font-size: clamp(37px, 4.3vw, 56px);
+  line-height: 1.12;
+  font-weight: 600;
+  letter-spacing: -2.5px;
+}
+
+.category-section-note {
+  padding-bottom: 8px;
+  color: #87939b;
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 1.4px;
+}
+
+.kryvon-category-grid {
+  max-width: 1440px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.kryvon-category-card {
+  min-width: 0;
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  color: var(--ink);
+  background: white;
+  border: 1px solid rgba(25, 45, 60, 0.06);
+  border-radius: 3px;
+  cursor: pointer;
+  box-shadow: 0 5px 22px rgba(30, 48, 60, 0.035);
+  transition: box-shadow 0.35s ease;
+}
+
+.kryvon-category-card:hover {
+  box-shadow: 0 15px 38px rgba(30, 48, 60, 0.1);
+}
+
+.category-audio .category-image-area {
+  background: #dca8df;
+}
+
+.category-mobile .category-image-area {
+  background: #ffcfaf;
+}
+
+.category-computing .category-image-area {
+  background: #c0f4b8;
+}
+
+.category-gaming .category-image-area {
+  background: #d3d7dc;
+}
+
+.category-image-area {
+  height: 235px;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.category-number {
+  position: absolute;
+  z-index: 2;
+  top: 16px;
+  left: 17px;
+  color: rgba(35, 54, 68, 0.55);
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 1px;
+}
+
+.category-image-area > img {
+  width: 86%;
+  height: 82%;
+  position: relative;
+  z-index: 1;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+  transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.kryvon-category-card:hover .category-image-area > img {
+  transform: scale(1.07);
+}
+
+.category-image-arrow {
+  position: absolute;
+  z-index: 3;
+  right: 15px;
+  bottom: 15px;
+  width: 35px;
+  height: 35px;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.kryvon-category-card:hover .category-image-arrow {
+  color: white;
+  background: var(--ink);
+  transform: rotate(-35deg);
+}
+
+.category-card-content {
+  min-height: 180px;
+  padding: 23px 20px 21px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 10px;
+  background: white;
+}
+
+.category-card-content > div {
+  min-width: 0;
+}
+
+.category-status {
+  display: block;
+  margin-bottom: 13px;
+  color: #8a969e;
+  font-family: 'DM Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 1.15px;
+}
+
+.category-card-content h3 {
+  margin: 0 0 5px;
+  color: var(--ink);
+  font-size: 23px;
+  font-weight: 600;
+  letter-spacing: -0.7px;
+}
+
+.category-tagline {
+  margin: 0 0 10px;
+  color: #647480;
+  font-family: 'Playfair Display', serif;
+  font-size: 15px;
+  font-style: italic;
+}
+
+.category-description {
+  margin: 0;
+  color: #929ca3;
+  font-size: 10px;
+  line-height: 1.6;
+}
+
+.category-bottom-arrow {
+  flex-shrink: 0;
+  padding-bottom: 3px;
+  color: #87939b;
+  transition: transform 0.3s ease;
+}
+
+.kryvon-category-card:hover .category-bottom-arrow {
+  transform: translateX(5px);
+  color: var(--cyan);
+}
+
+/* =========================================
+   KRYVON OFFERS & COUPONS
+========================================= */
+
+.kryvon-offers-section {
+  position: relative;
+  overflow: hidden;
+  padding: 105px 9% 85px;
+  background: #d9a9a8;
+  isolation: isolate;
+}
+
+/* Soft champagne light details */
+.kryvon-offers-section::before,
+.kryvon-offers-section::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: 50%;
+}
+
+.kryvon-offers-section::before {
+  width: 440px;
+  height: 440px;
+  top: -250px;
+  right: -100px;
+  border: 1px solid rgba(255, 244, 220, 0.35);
+  box-shadow:
+    0 0 0 22px rgba(255, 244, 220, 0.045),
+    0 0 0 45px rgba(255, 244, 220, 0.035);
+}
+
+.kryvon-offers-section::after {
+  width: 280px;
+  height: 280px;
+  bottom: -190px;
+  left: -100px;
+  border: 1px solid rgba(255, 244, 220, 0.3);
+}
+
+.kryvon-offers-heading {
+  max-width: 1440px;
+  margin: 0 auto 48px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 30px;
+}
+
+.offers-eyebrow {
+  display: inline-block;
+  color: #71354a;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  line-height: 1.7;
+}
+
+.kryvon-offers-heading h2 {
+  margin: 17px 0 0;
+  color: #641f36;
+  font-size: clamp(46px, 5.2vw, 68px);
+  line-height: 1.02;
+  font-weight: 700;
+  letter-spacing: -3px;
+}
+
+/* Champagne shimmer on the main editorial heading */
+.kryvon-offers-heading h2 em {
+  font-family: 'Playfair Display', serif;
+  font-weight: 600;
+  font-style: italic;
+  letter-spacing: -2.5px;
+  background: linear-gradient(
+    110deg,
+    #641f36 0%,
+    #641f36 32%,
+    #a45b63 46%,
+    #f5dfb0 51%,
+    #a45b63 57%,
+    #641f36 72%,
+    #641f36 100%
+  );
+  background-size: 220% 100%;
+  background-position: 100% 50%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: #641f36;
+  -webkit-text-fill-color: transparent;
+  animation: maroon-shimmer 7s ease-in-out infinite;
+}
+
+.offers-subtitle {
+  margin: 0 0 9px;
+  color: #713b4a;
+  font-size: 17px;
+  line-height: 1.8;
+  text-align: right;
+}
+
+.offers-subtitle em {
+  color: #641f36;
+  font-family: 'Playfair Display', serif;
+  font-size: 21px;
+  font-weight: 500;
+}
+
+.kryvon-offers-grid {
+  max-width: 1440px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.kryvon-offer-card {
+  min-width: 0;
+  min-height: 365px;
+  padding: 26px 26px 24px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  border: 1px solid rgba(100, 31, 54, 0.09);
+  border-radius: 4px;
+  box-shadow: 0 8px 26px rgba(87, 39, 53, 0.055);
+  transition: box-shadow 0.35s ease;
+}
+
+.kryvon-offer-card:hover {
+  box-shadow: 0 17px 36px rgba(87, 39, 53, 0.13);
+}
+
+.offer-welcome {
+  background: #dceaf0;
+}
+
+.offer-bundle {
+  background: #f9f3ed;
+}
+
+.offer-special {
+  background: #dceaf0;
+}
+
+.offer-card-top {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.offer-icon {
+  width: 43px;
+  height: 43px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  color: #641f36;
+  background: rgba(255, 255, 255, 0.58);
+  border: 1px solid rgba(100, 31, 54, 0.12);
+  border-radius: 50%;
+}
+
+.offer-number {
+  color: #87616a;
+  font-family: 'DM Mono', monospace;
+  font-size: 8px;
+  font-weight: 500;
+  letter-spacing: 1.1px;
+  text-align: right;
+}
+
+.offer-card-copy {
+  position: relative;
+  z-index: 1;
+  margin-top: 36px;
+}
+
+.offer-card-label {
+  display: block;
+  color: #8b6870;
+  font-family: 'DM Mono', monospace;
+  font-size: 8px;
+  font-weight: 500;
+  letter-spacing: 1.45px;
+}
+
+.offer-card-copy h3 {
+  margin: 12px 0 12px;
+  color: #641f36;
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(27px, 2.6vw, 35px);
+  font-weight: 600;
+  font-style: italic;
+  line-height: 1.16;
+  letter-spacing: -0.8px;
+}
+
+.offer-card-copy p {
+  max-width: 320px;
+  margin: 0;
+  color: #6d6870;
+  font-size: 12px;
+  line-height: 1.85;
+}
+
+.offer-card-link {
+  position: relative;
+  z-index: 2;
+  margin-top: auto;
+  padding-top: 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #641f36 !important;
+  font-size: 11px;
+  font-weight: 700;
+  transition: gap 0.25s ease;
+}
+
+.offer-card-link:hover {
+  gap: 16px;
+}
+
+.offer-decoration {
+  position: absolute;
+  width: 125px;
+  height: 125px;
+  right: -43px;
+  bottom: -48px;
+  border: 1px solid rgba(100, 31, 54, 0.12);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.offer-decoration::before,
+.offer-decoration::after {
+  content: '';
+  position: absolute;
+  border: 1px solid rgba(100, 31, 54, 0.1);
+  border-radius: 50%;
+}
+
+.offer-decoration::before {
+  inset: 13px;
+}
+
+.offer-decoration::after {
+  inset: 28px;
+}
+
+.offer-decoration-two {
+  width: 150px;
+  height: 150px;
+  right: -55px;
+  bottom: -65px;
+}
+
+.offer-decoration-three {
+  width: 110px;
+  height: 110px;
+  right: -32px;
+  bottom: -38px;
+}
+
+.offers-footnote {
+  max-width: 1440px;
+  margin: 25px auto 0;
+  color: rgba(91, 48, 61, 0.8);
+  font-size: 10px;
+  line-height: 1.7;
+  text-align: center;
+  letter-spacing: 0.2px;
+}
+
+@keyframes maroon-shimmer {
+  0%, 30% {
+    background-position: 100% 50%;
+  }
+
+  65%, 100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* =========================================
+   CLOSING SECTION
+========================================= */
+
+.kryvon-closing {
+  padding: 105px 25px 115px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background: #f8f6f1;
+}
+
+.kryvon-closing h2 {
+  margin: 22px 0 28px;
+  color: var(--ink);
+  font-size: clamp(48px, 6vw, 75px);
+  line-height: 1.05;
+  letter-spacing: -3px;
+}
+
+.kryvon-closing a {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 22px;
+  color: white;
+  background: var(--ink);
+  font-size: 12px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.kryvon-closing a:hover {
+  background: var(--cyan);
+  transform: translateY(-3px);
+}
+
+/* =========================================
+   ANIMATIONS
+========================================= */
+
+@keyframes product-float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+/* =========================================
+   RESPONSIVE — TABLETS
+========================================= */
+
+@media (max-width: 1050px) {
+  .kryvon-nav {
+    padding: 0 5%;
+  }
+
+  .kryvon-nav-links {
+    gap: 20px;
+  }
+
+  .kryvon-hero {
+    padding: 70px 6%;
+    gap: 35px;
+  }
+
+  .kryvon-product-section,
+  .kryvon-offers-section {
+    padding-left: 6%;
+    padding-right: 6%;
+  }
+
+  .kryvon-category-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .category-image-area {
+    height: 260px;
+  }
+
+  .kryvon-offers-grid {
+    gap: 14px;
+  }
+
+  .kryvon-offer-card {
+    padding: 23px 20px;
+  }
+
+  .offer-card-copy h3 {
+    font-size: 29px;
+  }
+}
+
+/* =========================================
+   RESPONSIVE — MOBILE
+========================================= */
+
+@media (max-width: 700px) {
+  .kryvon-nav {
+    min-height: 68px;
+    padding: 0 20px;
+  }
+
+  .kryvon-logo {
+    font-size: 22px;
+  }
+
+  .kryvon-nav-links {
+    display: none;
+  }
+
+  .kryvon-cart {
+    padding: 9px 12px;
+    font-size: 12px;
+  }
+
+  .kryvon-hero {
+    min-height: auto;
+    padding: 65px 23px;
+    grid-template-columns: 1fr;
+    gap: 35px;
+  }
+
+  .kryvon-hero-copy h1 {
+    font-size: clamp(43px, 11vw, 60px);
+    letter-spacing: -2.5px;
+  }
+
+  .kryvon-hero-copy > p {
+    font-size: 14px;
+  }
+
+  .kryvon-hero-visual {
+    min-height: 320px;
+  }
+
+  .hero-product-image {
+    max-height: 340px;
+  }
+
+  .hero-floating-label {
+    right: 0;
+    top: 4%;
+  }
+
+  .kryvon-product-section {
+    padding: 70px 20px;
+  }
+
+  .product-section-heading {
+    margin-bottom: 30px;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .product-section-heading h2 {
+    font-size: 43px;
+  }
+
+  .category-section-note {
+    font-size: 8px;
+  }
+
+  .kryvon-category-grid {
+    grid-template-columns: 1fr;
+    gap: 17px;
+  }
+
+  .category-image-area {
+    height: 260px;
+  }
+
+  .category-card-content {
+    min-height: 155px;
+  }
+
+  .kryvon-offers-section {
+    padding: 75px 20px 65px;
+  }
+
+  .kryvon-offers-heading {
+    margin-bottom: 32px;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .kryvon-offers-heading h2 {
+    font-size: 51px;
+    letter-spacing: -2px;
+  }
+
+  .offers-subtitle {
+    text-align: left;
+    font-size: 15px;
+  }
+
+  .offers-subtitle em {
+    font-size: 19px;
+  }
+
+  .kryvon-offers-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .kryvon-offer-card {
+    min-height: 330px;
+    padding: 24px;
+  }
+
+  .offer-card-copy {
+    margin-top: 32px;
+  }
+
+  .offer-card-copy h3 {
+    font-size: 32px;
+  }
+
+  .offer-card-copy p {
+    font-size: 12px;
+  }
+
+  .offers-footnote {
+    margin-top: 20px;
+    text-align: left;
+  }
+
+  .kryvon-closing {
+    padding: 80px 20px;
+  }
+
+  .kryvon-closing h2 {
+    font-size: 54px;
+  }
+}
+
+/* =========================================
+   ACCESSIBILITY
+========================================= */
+
+.kryvon-home button:focus-visible,
+.kryvon-home a:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kryvon-home *,
+  .kryvon-home *::before,
+  .kryvon-home *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* =========================================
+   KRYVON OFFERS — IMAGE BACKGROUND UPDATE
+   ========================================= */
+
+.kryvon-offers-section {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background-image:
+    linear-gradient(
+      rgba(255, 250, 245, 0.48),
+      rgba(255, 250, 245, 0.48)
+    ),
+    url('../assets/images/gifts.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Keep section content above the background */
+.kryvon-offers-section > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Remove old decorative texture */
+.kryvon-offers-section::before,
+.kryvon-offers-section::after {
+  content: none;
+}
+
+/* Clean white offer cards */
+.kryvon-offer-card,
+.kryvon-offer-card.offer-welcome,
+.kryvon-offer-card.offer-bundle,
+.kryvon-offer-card.offer-special {
+  background: #ffffff !important;
+  background-image: none !important;
+  border: 1px solid rgba(100, 31, 54, 0.10);
+  box-shadow: 0 12px 35px rgba(55, 35, 30, 0.09);
+}
+
+/* Consistent card hover */
+.kryvon-offer-card:hover {
+  box-shadow: 0 18px 42px rgba(55, 35, 30, 0.14);
+  transform: translateY(-5px);
+}
+
+/* Keep icons coordinated with the maroon palette */
+.offer-icon {
+  color: #641f36;
+}
+
+/* Keep text readable */
+.offer-card-copy h3 {
+  color: #641f36;
+}
+
+.offer-card-copy p {
+  color: #62565a;
+}
+
+.offer-card-link {
+  color: #641f36;
+}

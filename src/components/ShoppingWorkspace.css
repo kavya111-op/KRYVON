@@ -1,0 +1,672 @@
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&display=swap');
+
+/* =========================================
+   KRYVON — TULIP GARDEN PERSONAL SHOPPING
+   Botanical green / warm white / floral
+   Original layout and typography preserved
+========================================= */
+
+.kryvon-workspace {
+  --ink: #29432f;
+  --muted: #e5eddf;
+  --paper: #fafbf6;
+  --lavender: #52764a;
+  --lavender-light: #e6eddf;
+  --pink: #e8a4b3;
+  --line: rgba(255, 255, 255, 0.28);
+
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  max-width: 1440px;
+  margin: 30px auto;
+  padding: clamp(28px, 5vw, 72px);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.48);
+  border-radius: 25px;
+
+  background:
+    linear-gradient(
+      110deg,
+      rgba(29, 62, 37, 0.73) 0%,
+      rgba(39, 77, 43, 0.61) 55%,
+      rgba(44, 75, 44, 0.54) 100%
+    ),
+    url('/images/kryvon-tulip-background.jpg')
+    center 48% / cover no-repeat;
+
+  color: #fffdf7;
+  font-family: 'Instrument Sans', sans-serif;
+  box-shadow: 0 18px 55px rgba(30, 54, 34, 0.18);
+}
+
+.kryvon-workspace *,
+.kryvon-workspace *::before,
+.kryvon-workspace *::after {
+  box-sizing: border-box;
+}
+
+.kryvon-workspace button,
+.kryvon-workspace textarea,
+.kryvon-workspace input {
+  font-family: inherit;
+}
+
+/* INTRODUCTION */
+
+.workspace-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 30px;
+  padding-bottom: 35px;
+}
+
+.workspace-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 17px;
+  max-width: 760px;
+}
+
+.workspace-icon {
+  flex-shrink: 0;
+  margin-top: 8px;
+  color: #dcebd1;
+}
+
+.workspace-heading > div {
+  min-width: 0;
+}
+
+.workspace-eyebrow {
+  display: block;
+  margin-bottom: 15px;
+  color: #e2edda;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .19em;
+  line-height: 1.6;
+}
+
+.workspace-heading h2 {
+  margin: 0;
+  color: #fffdf7;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(38px, 5.4vw, 68px);
+  font-weight: 400;
+  line-height: 1.04;
+  letter-spacing: -.045em;
+}
+
+.workspace-heading h2 em {
+  color: #d8e9ce;
+  font-weight: 400;
+}
+
+.workspace-intro {
+  max-width: 570px;
+  margin: 21px 0 0;
+  color: #f0f3e9;
+  font-size: 15px;
+  line-height: 1.85;
+}
+
+/* BUDGET BADGE */
+
+.workspace-budget-badge {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 17px;
+  border: 1px solid rgba(255, 255, 255, .42);
+  border-radius: 50px;
+  background: rgba(246, 249, 239, .17);
+  backdrop-filter: blur(12px);
+}
+
+.budget-badge-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #f1f5e9;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .08em;
+}
+
+.workspace-budget-badge strong {
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.budget-badge-caption {
+  padding-left: 12px;
+  border-left: 1px solid rgba(255, 255, 255, .35);
+  color: #e4eddd;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 13px;
+  font-style: italic;
+}
+
+/* FORM */
+
+.workspace-form {
+  width: 100%;
+}
+
+/* SECTION HEADINGS */
+
+.workspace-section {
+  margin-top: 27px;
+}
+
+.workspace-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 13px;
+}
+
+.workspace-label-row label {
+  color: #fffdf7;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(19px, 2.2vw, 25px);
+  font-style: italic;
+  font-weight: 500;
+}
+
+.workspace-step {
+  flex-shrink: 0;
+  color: #e0ecd7;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .1em;
+}
+
+/* TEXTAREA */
+
+.workspace-input-wrap {
+  width: 100%;
+}
+
+.workspace-textarea {
+  display: block;
+  width: 100%;
+  min-height: 125px;
+  padding: 22px 25px;
+  resize: vertical;
+  border: 1px solid rgba(255, 255, 255, .75);
+  border-radius: 15px;
+  outline: none;
+  background: rgba(255, 255, 249, .94);
+  color: #29432f;
+  font-size: 15px;
+  line-height: 1.75;
+  backdrop-filter: blur(12px);
+  transition: border-color .25s ease, box-shadow .25s ease;
+}
+
+.workspace-textarea::placeholder {
+  color: #82917b;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 15px;
+  font-style: italic;
+}
+
+.workspace-textarea:focus {
+  border-color: #8ba77e;
+  box-shadow: 0 0 0 4px rgba(218, 235, 207, .22);
+}
+
+/* INPUT FOOTER */
+
+.workspace-input-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 18px;
+  margin-top: 15px;
+}
+
+.workspace-input-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #f0f4e9;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 15px;
+  font-style: italic;
+}
+
+.workspace-input-hint svg {
+  color: #d8e9ce;
+}
+
+/* SUBMIT BUTTON */
+
+.workspace-submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 53px;
+  padding: 0 27px;
+  border: 1px solid rgba(255, 255, 255, .35);
+  border-radius: 50px;
+  background: #52764a;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 7px 20px rgba(22, 49, 27, .24);
+  transition: background .25s ease, box-shadow .25s ease;
+}
+
+.workspace-submit:hover {
+  background: #385c3c;
+  box-shadow: 0 10px 24px rgba(22, 49, 27, .32);
+}
+
+.workspace-submit:disabled {
+  cursor: not-allowed;
+  opacity: .55;
+}
+
+.workspace-button-content {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 13px;
+}
+
+.workspace-spin {
+  animation: kryvon-spin 1s linear infinite;
+}
+
+@keyframes kryvon-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* SUGGESTED IDEAS */
+
+.workspace-suggestions {
+  margin-top: 48px;
+  padding-top: 27px;
+  border-top: 1px solid var(--line);
+}
+
+.workspace-small-eyebrow {
+  display: block;
+  margin-bottom: 7px;
+  color: #dcebd1;
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: .15em;
+}
+
+.workspace-suggestions h3,
+.workspace-control-title h3 {
+  margin: 0;
+  color: #fffdf7;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 22px;
+  font-weight: 400;
+}
+
+.workspace-preset-list {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 11px;
+  margin-top: 20px;
+}
+
+.workspace-preset {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: start;
+  gap: 10px;
+  min-width: 0;
+  min-height: 104px;
+  padding: 17px 13px;
+  border: 1px solid rgba(255, 255, 255, .55);
+  border-radius: 13px;
+  background: rgba(250, 251, 244, .94);
+  color: #29432f;
+  text-align: left;
+  cursor: pointer;
+  backdrop-filter: blur(9px);
+  transition: background .25s ease, border-color .25s ease, transform .25s ease;
+}
+
+.workspace-preset:hover {
+  border-color: #a8c29a;
+  background: #ffffff;
+}
+
+.workspace-preset.is-selected {
+  border-color: #52764a;
+  background: #e5eddf;
+}
+
+.preset-number {
+  color: #52764a;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+}
+
+.preset-text {
+  color: #405c40;
+  font-size: 11px;
+  line-height: 1.65;
+}
+
+.preset-check {
+  color: #52764a;
+}
+
+/* BUDGET AND PRIORITY */
+
+.workspace-controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 35px;
+  margin-top: 32px;
+  padding-top: 29px;
+  border-top: 1px solid var(--line);
+}
+
+.workspace-control-panel {
+  min-width: 0;
+}
+
+.workspace-control-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 23px;
+}
+
+.control-icon {
+  display: grid;
+  place-items: center;
+  width: 37px;
+  height: 37px;
+  border: 1px solid rgba(255, 255, 255, .48);
+  border-radius: 50%;
+  background: rgba(246, 249, 239, .18);
+  color: #e0ecd7;
+}
+
+.workspace-control-title h3 {
+  font-size: 21px;
+}
+
+.workspace-label-row:has(.workspace-control-title) {
+  margin-bottom: 23px;
+}
+
+.workspace-price {
+  color: #e3efd9;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 23px;
+  font-weight: 500;
+}
+
+/* RANGE SLIDER */
+
+.workspace-range {
+  display: block;
+  width: 100%;
+  height: 5px;
+  margin: 23px 0 16px;
+  border-radius: 20px;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  background: linear-gradient(
+    to right,
+    #b6d1a7 0%,
+    #b6d1a7 var(--range-progress, 25%),
+    rgba(255, 255, 255, .35) var(--range-progress, 25%),
+    rgba(255, 255, 255, .35) 100%
+  );
+  cursor: pointer;
+}
+
+.workspace-range::-webkit-slider-thumb {
+  width: 19px;
+  height: 19px;
+  border: 3px solid #f8faf3;
+  border-radius: 50%;
+  appearance: none;
+  -webkit-appearance: none;
+  background: #52764a;
+  box-shadow: 0 0 0 1px #dcebd1;
+}
+
+.workspace-range::-moz-range-thumb {
+  width: 13px;
+  height: 13px;
+  border: 3px solid #f8faf3;
+  border-radius: 50%;
+  background: #52764a;
+  box-shadow: 0 0 0 1px #dcebd1;
+}
+
+.workspace-range-labels {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  color: #edf2e7;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+}
+
+.workspace-helper {
+  margin: 18px 0 0;
+  color: #e4ecdc;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 13px;
+  font-style: italic;
+}
+
+/* PRIORITIES */
+
+.workspace-priority-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 5px;
+}
+
+.workspace-priority {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  padding: 14px 13px;
+  border: 1px solid rgba(255, 255, 255, .55);
+  border-radius: 12px;
+  background: rgba(250, 251, 244, .94);
+  color: #29432f;
+  text-align: left;
+  cursor: pointer;
+  transition: background .25s ease, border-color .25s ease;
+}
+
+.workspace-priority:hover {
+  border-color: #a8c29a;
+}
+
+.workspace-priority.is-selected {
+  border-color: #52764a;
+  background: #e5eddf;
+}
+
+.priority-index {
+  color: #52764a;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+}
+
+.priority-copy {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.priority-copy strong {
+  color: #385c3c;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.priority-copy small {
+  color: #71836b;
+  font-size: 10px;
+}
+
+.priority-radio {
+  display: grid;
+  place-items: center;
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  border: 1px solid #8ba77e;
+  border-radius: 50%;
+}
+
+.priority-radio span {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #52764a;
+}
+
+/* FOOTER */
+
+.workspace-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: 37px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+}
+
+.workspace-footer > span:first-child {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: #f0f4e9;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 16px;
+  font-style: italic;
+}
+
+.workspace-footer-note {
+  color: #e0ead9;
+  font-size: 11px;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 900px) {
+  .workspace-preset-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .workspace-controls {
+    gap: 22px;
+  }
+}
+
+@media (max-width: 650px) {
+  .kryvon-workspace {
+    margin: 16px auto;
+    padding: 27px 19px;
+    border-radius: 18px;
+  }
+
+  .workspace-header {
+    gap: 22px;
+  }
+
+  .workspace-heading {
+    gap: 10px;
+  }
+
+  .workspace-heading h2 {
+    font-size: clamp(36px, 10vw, 48px);
+  }
+
+  .workspace-budget-badge {
+    border-radius: 14px;
+  }
+
+  .budget-badge-caption {
+    display: none;
+  }
+
+  .workspace-label-row {
+    align-items: flex-start;
+  }
+
+  .workspace-label-row label {
+    font-size: 20px;
+  }
+
+  .workspace-input-footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .workspace-submit {
+    width: 100%;
+  }
+
+  .workspace-preset-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .workspace-controls {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  .workspace-footer {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 390px) {
+  .workspace-preset-list {
+    grid-template-columns: 1fr;
+  }
+
+  .workspace-priority-list {
+    grid-template-columns: 1fr;
+  }
+
+  .workspace-step {
+    font-size: 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kryvon-workspace *,
+  .kryvon-workspace *::before,
+  .kryvon-workspace *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+  }
+}

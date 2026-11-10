@@ -1,7 +1,16 @@
+
 import React, { useState } from 'react';
+import { motion } from 'motion/react';
 import { CurrencyCode, LedgerOrder } from '../types';
 import { formatPrice } from '../utils/currency';
-import { FileText, RotateCcw, CheckCircle2, ShieldCheck, Search } from 'lucide-react';
+import {
+  FileText,
+  RotateCcw,
+  CheckCircle2,
+  ShieldCheck,
+  Search,
+  ReceiptText,
+} from 'lucide-react';
 
 interface OrderLedgerProps {
   orders: LedgerOrder[];
@@ -14,7 +23,7 @@ export const OrderLedger: React.FC<OrderLedgerProps> = ({
   orders,
   currency,
   onRefund,
-  isLoading
+  isLoading,
 }) => {
   const [refundingId, setRefundingId] = useState<string | null>(null);
   const [filterQuery, setFilterQuery] = useState('');
@@ -27,10 +36,16 @@ export const OrderLedger: React.FC<OrderLedgerProps> = ({
   );
 
   const handleRefundClick = async (orderId: string) => {
-    if (!window.confirm(`Are you sure you want to process a verified PayPal Sandbox refund for order ${orderId}?`)) {
+    if (
+      !window.confirm(
+        `Are you sure you want to process a verified PayPal Sandbox refund for order ${orderId}?`
+      )
+    ) {
       return;
     }
+
     setRefundingId(orderId);
+
     try {
       await onRefund(orderId);
     } finally {
@@ -43,158 +58,237 @@ export const OrderLedger: React.FC<OrderLedgerProps> = ({
     .reduce((acc, curr) => acc + curr.amountINR, 0);
 
   return (
-    <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pb-6 border-b border-slate-200">
-        <div>
-          <div className="flex items-center gap-2">
-            <span className="p-1.5 rounded-lg bg-cyan-50 text-cyan-700 border border-cyan-200">
-              <FileText className="w-5 h-5" />
-            </span>
-            <h2 className="text-xl font-bold text-slate-900 tracking-tight">
-              Order History & Activity Ledger
-            </h2>
+    <motion.div
+      initial={{ opacity: 0, y: 18 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.1 }}
+      transition={{ duration: 0.65, ease: 'easeOut' }}
+      className="relative overflow-hidden rounded-[26px] border border-[#DCE5EA] bg-[#F4F7F8] p-5 shadow-[0_12px_40px_rgba(46,65,82,0.055)] sm:p-8"
+    >
+      <div className="relative z-10">
+
+        {/* Header */}
+        <div className="flex flex-col justify-between gap-5 border-b border-[#DCE5EA] pb-6 md:flex-row md:items-center">
+          <div>
+            <div className="flex items-center gap-3">
+              <span className="rounded-xl border border-[#D2E0E8] bg-[#E7F0F4] p-2.5 text-[#547B91]">
+                <ReceiptText className="h-5 w-5" />
+              </span>
+
+              <div>
+                <span className="mb-1 block text-[10px] font-semibold uppercase tracking-[0.2em] text-[#7892A2]">
+                  Your KRYVON account
+                </span>
+
+                <h2 className="text-xl font-bold tracking-tight text-[#263B4A] sm:text-2xl">
+                  Your Orders & Payment History
+                </h2>
+              </div>
+            </div>
+
+            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-[#788B97]">
+              Your shopping journey, all in one place. Review purchases,
+              check payment details and manage eligible refunds with ease.
+            </p>
           </div>
-          <p className="text-xs text-slate-500 mt-1">
-            Auditable immutable record of all PayPal Sandbox captures and deterministic policy evaluations.
-          </p>
+
+          <motion.div
+            whileHover={{ y: -2 }}
+            className="min-w-[190px] rounded-2xl border border-[#D3E1E7] bg-[#EAF1F4] px-5 py-4 md:text-right"
+          >
+            <span className="block text-[10px] font-semibold uppercase tracking-[0.16em] text-[#718C9C]">
+              Total successfully paid
+            </span>
+
+            <span className="mt-1 block font-mono text-2xl font-bold tabular-nums text-[#426D83]">
+              {formatPrice(totalExpenditure, currency)}
+            </span>
+
+            <span className="mt-1 block text-[10px] text-[#8296A1]">
+              Across completed orders
+            </span>
+          </motion.div>
         </div>
 
-        <div className="text-right">
-          <span className="text-[11px] font-mono text-slate-500 block font-semibold">Total Completed Settlement</span>
-          <span className="text-xl font-mono font-extrabold text-emerald-700">
-            {formatPrice(totalExpenditure, currency)}
+        {/* Search and order count */}
+        <div className="my-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="relative w-full max-w-md">
+            <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[#8299A7]" />
+
+            <input
+              type="text"
+              placeholder="Find an order, product or payment reference..."
+              value={filterQuery}
+              onChange={(e) => setFilterQuery(e.target.value)}
+              className="w-full rounded-xl border border-[#DCE5E9] bg-[#FBFCFC] py-3 pl-10 pr-4 text-sm text-[#344957] outline-none transition-all placeholder:text-[#9BAAB1] focus:border-[#91B0C0] focus:bg-white focus:ring-4 focus:ring-[#E3EDF1]"
+            />
+          </div>
+
+          <span className="text-xs font-medium text-[#84939C]">
+            Showing{' '}
+            <strong className="text-[#4F6B7B]">{filteredOrders.length}</strong>{' '}
+            of {orders.length} orders
           </span>
         </div>
-      </div>
 
-      {/* Filter Bar */}
-      <div className="my-5 flex items-center justify-between gap-4">
-        <div className="relative flex-1 max-w-sm">
-          <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-          <input
-            type="text"
-            placeholder="Search by order ID, item name, or PayPal capture hash..."
-            value={filterQuery}
-            onChange={(e) => setFilterQuery(e.target.value)}
-            className="w-full bg-slate-50 border border-slate-200 rounded-lg pl-8 pr-3 py-2 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-cyan-500 focus:bg-white"
-          />
-        </div>
-        <span className="text-xs font-mono text-slate-500">
-          Showing {filteredOrders.length} of {orders.length} transactions
-        </span>
-      </div>
+        {/* Empty state */}
+        {filteredOrders.length === 0 ? (
+          <div className="rounded-2xl border border-dashed border-[#CFDDE4] bg-[#F9FBFC] px-5 py-14 text-center">
+            <span className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-[#E9F0F3] text-[#718FA0]">
+              <FileText className="h-5 w-5" />
+            </span>
 
-      {/* Table */}
-      {filteredOrders.length === 0 ? (
-        <div className="py-12 text-center text-slate-500 text-xs border border-dashed border-slate-200 rounded-xl">
-          No transactions found matching your criteria.
-        </div>
-      ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs border-collapse">
-            <thead>
-              <tr className="border-b border-slate-200 text-slate-500 font-mono text-[11px]">
-                <th className="py-3 px-3">Order ID & Date</th>
-                <th className="py-3 px-3">Product Item</th>
-                <th className="py-3 px-3">Amount</th>
-                <th className="py-3 px-3">Policy Gate</th>
-                <th className="py-3 px-3">PayPal Capture Ref</th>
-                <th className="py-3 px-3">Status</th>
-                <th className="py-3 px-3 text-right">Action</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 font-sans">
-              {filteredOrders.map((order) => {
-                const isRefunded = order.paymentStatus === 'REFUNDED';
-                const isCompleted = order.paymentStatus === 'COMPLETED';
+            <h3 className="text-base font-semibold text-[#344957]">
+              No matching orders just yet
+            </h3>
 
-                return (
-                  <tr key={order.orderId} className="hover:bg-slate-50 transition-colors">
-                    {/* Order ID & Date */}
-                    <td className="py-3 px-3 font-mono">
-                      <span className="font-bold text-slate-900 block">{order.orderId}</span>
-                      <span className="text-[10px] text-slate-500">
-                        {new Date(order.createdAt).toLocaleDateString()} {new Date(order.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                      </span>
-                    </td>
+            <p className="mt-1 text-sm text-[#8999A2]">
+              Try another search term or check your spelling.
+            </p>
+          </div>
+        ) : (
+          <div className="overflow-x-auto rounded-2xl border border-[#DCE5E9] bg-[#FCFDFD]">
+            <table className="w-full min-w-[950px] border-collapse text-left text-sm">
+              <thead>
+                <tr className="border-b border-[#DCE5E9] bg-[#EDF3F5] text-[10px] font-semibold uppercase tracking-[0.12em] text-[#718793]">
+                  <th className="px-4 py-4">Order & date</th>
+                  <th className="px-4 py-4">What you bought</th>
+                  <th className="px-4 py-4">Amount</th>
+                  <th className="px-4 py-4">Spending check</th>
+                  <th className="px-4 py-4">Payment reference</th>
+                  <th className="px-4 py-4">Payment status</th>
+                  <th className="px-4 py-4 text-right">Action</th>
+                </tr>
+              </thead>
 
-                    {/* Product */}
-                    <td className="py-3 px-3">
-                      <div className="flex items-center gap-2 max-w-[220px]">
-                        <img
-                          src={order.productImage}
-                          alt={order.productName}
-                          referrerPolicy="no-referrer"
-                          className="w-8 h-8 rounded object-cover bg-slate-100 border border-slate-200 shrink-0"
-                        />
-                        <span className="font-medium text-slate-800 truncate">{order.productName}</span>
-                      </div>
-                    </td>
+              <tbody className="divide-y divide-[#EAF0F2]">
+                {filteredOrders.map((order, index) => {
+                  const isRefunded = order.paymentStatus === 'REFUNDED';
+                  const isCompleted = order.paymentStatus === 'COMPLETED';
 
-                    {/* Amount */}
-                    <td className="py-3 px-3 font-mono font-bold text-slate-900 tabular-nums">
-                      {formatPrice(order.amountINR, currency)}
-                    </td>
+                  return (
+                    <motion.tr
+                      key={order.orderId}
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3, delay: index * 0.045 }}
+                      className="transition-colors hover:bg-[#F3F7F8]"
+                    >
+                      <td className="px-4 py-4">
+                        <span className="block font-semibold text-[#344957]">
+                          {order.orderId}
+                        </span>
 
-                    {/* Policy Gate */}
-                    <td className="py-3 px-3">
-                      <span
-                        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono font-semibold ${
-                          order.policyStatusAtPurchase === 'ALLOWED'
-                            ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
-                            : 'bg-amber-50 text-amber-800 border border-amber-200'
-                        }`}
-                      >
-                        <ShieldCheck className="w-3 h-3" />
-                        <span>{order.policyStatusAtPurchase}</span>
-                      </span>
-                    </td>
+                        <span className="mt-1 block text-[11px] text-[#92A0A8]">
+                          {new Date(order.createdAt).toLocaleDateString()}{' '}
+                          {new Date(order.createdAt).toLocaleTimeString([], {
+                            hour: '2-digit',
+                            minute: '2-digit',
+                          })}
+                        </span>
+                      </td>
 
-                    {/* PayPal Capture Ref */}
-                    <td className="py-3 px-3 font-mono text-[11px] text-cyan-800 font-medium">
-                      <span className="truncate block max-w-[150px]">{order.paypalCaptureId}</span>
-                    </td>
+                      <td className="px-4 py-4">
+                        <div className="flex max-w-[240px] items-center gap-3">
+                          <img
+                            src={order.productImage}
+                            alt={order.productName}
+                            referrerPolicy="no-referrer"
+                            className="h-10 w-10 shrink-0 rounded-lg border border-[#DCE5E9] bg-[#EDF2F4] object-cover"
+                          />
 
-                    {/* Status */}
-                    <td className="py-3 px-3">
-                      <span
-                        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono font-bold ${
-                          isCompleted
-                            ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                            : isRefunded
-                            ? 'bg-rose-50 text-rose-700 border border-rose-200'
-                            : 'bg-slate-100 text-slate-600'
-                        }`}
-                      >
-                        {isCompleted && <CheckCircle2 className="w-3 h-3 text-emerald-600" />}
-                        {isRefunded && <RotateCcw className="w-3 h-3 text-rose-600" />}
-                        <span>{order.paymentStatus}</span>
-                      </span>
-                    </td>
+                          <span className="truncate font-medium text-[#465C69]">
+                            {order.productName}
+                          </span>
+                        </div>
+                      </td>
 
-                    {/* Action */}
-                    <td className="py-3 px-3 text-right">
-                      {isCompleted ? (
-                        <button
-                          type="button"
-                          disabled={refundingId === order.orderId}
-                          onClick={() => handleRefundClick(order.orderId)}
-                          className="px-2.5 py-1 text-[11px] font-semibold text-rose-700 hover:text-white hover:bg-rose-600 border border-rose-200 rounded transition-colors cursor-pointer"
+                      <td className="whitespace-nowrap px-4 py-4 font-mono font-bold tabular-nums text-[#344957]">
+                        {formatPrice(order.amountINR, currency)}
+                      </td>
+
+                      <td className="px-4 py-4">
+                        <span
+                          className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-semibold ${
+                            order.policyStatusAtPurchase === 'ALLOWED'
+                              ? 'border-[#C9DFD1] bg-[#EFF6F0] text-[#548267]'
+                              : 'border-[#EAD9BE] bg-[#FAF4E9] text-[#A17B45]'
+                          }`}
                         >
-                          {refundingId === order.orderId ? 'Refunding...' : 'Refund'}
-                        </button>
-                      ) : (
-                        <span className="text-slate-400 text-[11px] font-mono">Settled</span>
-                      )}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+                          <ShieldCheck className="h-3 w-3" />
+                          {order.policyStatusAtPurchase === 'ALLOWED'
+                            ? 'Within budget'
+                            : 'Review required'}
+                        </span>
+                      </td>
+
+                      <td className="px-4 py-4 font-mono text-[11px] text-[#64869A]">
+                        <span className="block max-w-[150px] truncate">
+                          {order.paypalCaptureId}
+                        </span>
+                      </td>
+
+                      <td className="px-4 py-4">
+                        <span
+                          className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-semibold ${
+                            isCompleted
+                              ? 'border-[#C9DFD1] bg-[#EFF6F0] text-[#548267]'
+                              : isRefunded
+                              ? 'border-[#E8CCD3] bg-[#FBF1F3] text-[#A56878]'
+                              : 'border-[#DCE5E9] bg-[#F0F4F5] text-[#788C97]'
+                          }`}
+                        >
+                          {isCompleted && <CheckCircle2 className="h-3 w-3" />}
+                          {isRefunded && <RotateCcw className="h-3 w-3" />}
+                          {isCompleted
+                            ? 'Paid'
+                            : isRefunded
+                            ? 'Refunded'
+                            : order.paymentStatus}
+                        </span>
+                      </td>
+
+                      <td className="px-4 py-4 text-right">
+                        {isCompleted ? (
+                          <button
+                            type="button"
+                            disabled={
+                              refundingId === order.orderId ||
+                              isLoading
+                            }
+                            onClick={() => handleRefundClick(order.orderId)}
+                            className="inline-flex items-center gap-1.5 rounded-lg border border-[#E5CBD1] bg-[#FCF5F6] px-3 py-2 text-[11px] font-semibold text-[#A56878] transition-all hover:border-[#C99AA5] hover:bg-[#F5E7EA] disabled:cursor-not-allowed disabled:opacity-50"
+                          >
+                            <RotateCcw className="h-3 w-3" />
+                            {refundingId === order.orderId
+                              ? 'Processing...'
+                              : 'Request refund'}
+                          </button>
+                        ) : (
+                          <span className="text-[11px] text-[#99A5AB]">
+                            {isRefunded ? 'Completed' : 'No action needed'}
+                          </span>
+                        )}
+                      </td>
+                    </motion.tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        {/* Trust note */}
+        <div className="mt-5 flex items-start gap-2 text-xs leading-relaxed text-[#82929B]">
+          <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-[#779A88]" />
+
+          <p>
+            Your payment records are kept for reference. Payment processing and
+            refund actions continue to use the existing PayPal verification
+            flow.
+          </p>
         </div>
-      )}
-    </div>
+      </div>
+    </motion.div>
   );
 };

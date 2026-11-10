@@ -1,0 +1,542 @@
+
+/* =========================================
+   KRYVON — PAYPAL CHECKOUT
+   Editorial product detail experience
+========================================= */
+
+.paypal-overlay,
+.paypal-overlay * {
+  box-sizing: border-box;
+}
+
+.paypal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  overflow-y: auto;
+  background: rgba(35, 32, 34, 0.42);
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
+  font-family: 'Instrument Sans', sans-serif;
+}
+
+.paypal-modal {
+  position: relative;
+  width: 100%;
+  max-width: 590px;
+  margin: auto;
+  padding: 34px 38px 20px;
+  border: 1px solid #eee9e4;
+  border-radius: 16px;
+  background: #fffefa;
+  color: #302d30;
+  box-shadow: 0 24px 90px rgba(30, 25, 30, 0.17);
+}
+
+/* CLOSE */
+
+.paypal-close {
+  position: absolute;
+  top: 19px;
+  right: 19px;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: #89818a;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.paypal-close:hover {
+  background: #f2eeeb;
+  color: #302d30;
+}
+
+/* HEADER */
+
+.paypal-header {
+  display: flex;
+  align-items: center;
+  gap: 17px;
+  padding: 0 38px 24px 0;
+  border-bottom: 1px solid #eae5df;
+}
+
+.paypal-brand {
+  display: flex;
+  flex-shrink: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-width: 54px;
+  color: #003087;
+  font-family: Arial, sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.paypal-logo {
+  display: block;
+  width: 39px;
+  height: 30px;
+  object-fit: contain;
+}
+
+.paypal-heading {
+  min-width: 0;
+}
+
+.paypal-heading h2 {
+  margin: 0;
+  color: #302d30;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.paypal-heading p {
+  margin: 6px 0 0;
+  color: #898087;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* MAIN CONTENT */
+
+.paypal-content {
+  padding-top: 25px;
+}
+
+.paypal-section-label {
+  margin-bottom: 14px;
+  color: #93858d;
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+}
+
+/* PRODUCT INFORMATION */
+
+.paypal-product {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr);
+  align-items: center;
+  gap: 20px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #eee9e4;
+}
+
+.paypal-product-image-wrap {
+  width: 150px;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: #f3f0eb;
+}
+
+.paypal-product-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.paypal-product-image-wrap:hover .paypal-product-image {
+  transform: scale(1.04);
+}
+
+.paypal-product-info {
+  min-width: 0;
+}
+
+.paypal-category {
+  display: block;
+  margin-bottom: 8px;
+  color: #927d91;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.paypal-product-info h3 {
+  margin: 0 0 12px;
+  color: #332f32;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.paypal-product-price {
+  display: block;
+  color: #302d30;
+  font-family: 'DM Mono', monospace;
+  font-size: 19px;
+  font-weight: 500;
+}
+
+/* ORDER SUMMARY */
+
+.paypal-summary {
+  padding: 23px 0 18px;
+  border-bottom: 1px solid #eee9e4;
+}
+
+.paypal-summary-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 8px 0;
+  color: #80777d;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.paypal-summary-row > span:last-child {
+  max-width: 65%;
+  color: #464047;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+.paypal-total-row {
+  margin-top: 8px;
+  padding-top: 15px;
+  border-top: 1px solid #eee9e4;
+  color: #302d30;
+  font-size: 14px;
+}
+
+.paypal-total-row strong:last-child {
+  color: #302d30;
+  font-family: 'DM Mono', monospace;
+  font-size: 19px;
+  font-weight: 500;
+}
+
+/* SPENDING POLICY */
+
+.paypal-policy {
+  margin-top: 20px;
+  padding: 15px 16px;
+  border: 1px solid;
+}
+
+.paypal-policy-heading {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.paypal-policy-heading svg {
+  flex-shrink: 0;
+}
+
+.paypal-policy p {
+  margin: 9px 0 0;
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+.paypal-policy-allowed {
+  border-color: #d8e7d9;
+  background: #f3f7f1;
+  color: #64816b;
+}
+
+.paypal-policy-review {
+  border-color: #eadfc8;
+  background: #faf6ed;
+  color: #98794f;
+}
+
+.paypal-policy-blocked {
+  border-color: #ecd9d9;
+  background: #faf1f0;
+  color: #a96e72;
+}
+
+/* APPROVAL CHECKBOX */
+
+.paypal-approval {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 15px;
+  padding: 13px;
+  border: 1px solid #eadfc8;
+  background: #faf6ed;
+  color: #756246;
+  font-size: 11px;
+  line-height: 1.65;
+  cursor: pointer;
+}
+
+.paypal-approval input {
+  flex-shrink: 0;
+  margin-top: 3px;
+  accent-color: #927c98;
+}
+
+/* PRIMARY BUTTON */
+
+.paypal-primary-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 11px;
+  width: 100%;
+  min-height: 49px;
+  margin-top: 23px;
+  padding: 12px 18px;
+  border: 1px solid #0070ba;
+  background: #0070ba;
+  color: #fff;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.paypal-primary-button:hover:not(:disabled) {
+  background: #005ea6;
+  box-shadow: 0 5px 15px rgba(0, 112, 186, 0.16);
+  transform: translateY(-1px);
+}
+
+.paypal-primary-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.paypal-primary-button svg:first-child:last-child {
+  flex-shrink: 0;
+}
+
+/* SECONDARY BUTTON */
+
+.paypal-secondary-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  width: 100%;
+  min-height: 43px;
+  margin-top: 10px;
+  padding: 10px 15px;
+  border: 1px solid #ded6d9;
+  background: transparent;
+  color: #6f626d;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.paypal-secondary-button:hover {
+  background: #f5f1ef;
+}
+
+/* FOOTNOTE */
+
+.paypal-footnote {
+  max-width: 400px;
+  margin: 13px auto 0;
+  color: #9b9297;
+  font-size: 10px;
+  line-height: 1.7;
+  text-align: center;
+}
+
+/* ERROR */
+
+.paypal-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  margin-top: 15px;
+  padding: 12px;
+  border: 1px solid #ecd9d9;
+  background: #faf1f0;
+  color: #a96e72;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.paypal-error svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* ORDER REFERENCE */
+
+.paypal-confirmation {
+  margin-top: 20px;
+  padding: 13px 15px;
+  border: 1px solid #eee9e4;
+  background: #faf8f5;
+}
+
+.paypal-order-id {
+  max-width: 65%;
+  color: #786a78 !important;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  overflow-wrap: anywhere;
+}
+
+/* LOADING STATES */
+
+.paypal-state {
+  padding: 46px 12px 35px;
+  text-align: center;
+}
+
+.paypal-spinner {
+  color: #927c98;
+  animation: paypal-spin 1s linear infinite;
+}
+
+@keyframes paypal-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.paypal-state h3 {
+  margin: 18px 0 9px;
+  color: #302d30;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 23px;
+  font-weight: 500;
+}
+
+.paypal-state > p {
+  max-width: 360px;
+  margin: 0 auto;
+  color: #898087;
+  font-size: 12px;
+  line-height: 1.75;
+}
+
+/* FAILURE STATE */
+
+.paypal-failed-icon {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  margin: 0 auto;
+  border-radius: 50%;
+  background: #f8e9e8;
+  color: #b36e73;
+}
+
+.paypal-state .paypal-failed-message {
+  max-width: 100%;
+  margin-top: 14px;
+  padding: 13px;
+  background: #faf1f0;
+  color: #a96e72;
+  text-align: left;
+}
+
+.paypal-state-actions {
+  display: grid;
+  gap: 9px;
+  margin-top: 20px;
+}
+
+/* FOOTER */
+
+.paypal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  margin-top: 25px;
+  padding-top: 15px;
+  border-top: 1px solid #eee9e4;
+  color: #a39ba0;
+  font-size: 10px;
+}
+
+.paypal-footer svg {
+  flex-shrink: 0;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 540px) {
+  .paypal-overlay {
+    align-items: flex-start;
+    padding: 10px;
+  }
+
+  .paypal-modal {
+    margin: auto 0;
+    padding: 26px 20px 17px;
+    border-radius: 13px;
+  }
+
+  .paypal-header {
+    gap: 12px;
+  }
+
+  .paypal-heading h2 {
+    font-size: 20px;
+  }
+
+  .paypal-product {
+    grid-template-columns: 105px minmax(0, 1fr);
+    gap: 14px;
+  }
+
+  .paypal-product-image-wrap {
+    width: 105px;
+  }
+
+  .paypal-product-info h3 {
+    font-size: 14px;
+  }
+
+  .paypal-product-price {
+    font-size: 16px;
+  }
+
+  .paypal-total-row strong:last-child {
+    font-size: 17px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .paypal-spinner {
+    animation-duration: 2s;
+  }
+
+  .paypal-product-image,
+  .paypal-primary-button,
+  .paypal-close {
+    transition: none;
+  }
+}

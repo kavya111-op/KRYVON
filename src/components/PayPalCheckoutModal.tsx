@@ -1,20 +1,27 @@
+
+import React, { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
-import React, { useState, useEffect } from 'react';
-import { CurrencyCode, LedgerOrder, PolicyVerdict, Product } from '../types';
-import { formatPrice } from '../utils/currency';
-import { 
-  ShieldCheck, 
-  AlertTriangle, 
-  X, 
-  Lock, 
-  CreditCard, 
-  CheckCircle2, 
+import {
+  ShieldCheck,
+  AlertTriangle,
+  X,
+  Lock,
+  CheckCircle2,
   ArrowRight,
   Loader2,
   ExternalLink,
-  RefreshCw,
-  AlertCircle
+  AlertCircle,
 } from 'lucide-react';
+
+import {
+  CurrencyCode,
+  LedgerOrder,
+  PolicyVerdict,
+  Product,
+} from '../types';
+
+import { formatPrice } from '../utils/currency';
+import './PayPalCheckoutModal.css';
 
 interface PayPalCheckoutModalProps {
   product: Product;
@@ -31,31 +38,50 @@ export const PayPalCheckoutModal: React.FC<PayPalCheckoutModalProps> = ({
   onClose,
   onPaymentSuccess,
 }) => {
-  const [step, setStep] = useState<'review' | 'creating' | 'awaiting_approval' | 'capturing' | 'failed'>('review');
+  const [step, setStep] = useState<
+    'review' | 'creating' | 'awaiting_approval' | 'capturing' | 'failed'
+  >('review');
+
   const [userConfirmedApproval, setUserConfirmedApproval] = useState(false);
-  const [paypalOrderId, setPaypalOrderId] = useState<string>('');
-  const [approveUrl, setApproveUrl] = useState<string>('');
-  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [paypalOrderId, setPaypalOrderId] = useState('');
+  const [approveUrl, setApproveUrl] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const [hasOpenedPayPal, setHasOpenedPayPal] = useState(false);
 
-  const isApprovalRequired = policyVerdict.status === 'APPROVAL_REQUIRED';
-  const isBlocked = policyVerdict.status === 'BLOCKED';
+  const isApprovalRequired =
+    policyVerdict.status === 'APPROVAL_REQUIRED';
 
-  // Listen for return / postMessage from popup if applicable
+  const isBlocked =
+    policyVerdict.status === 'BLOCKED';
+
+  // Listen for PayPal approval messages from the return window.
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
       if (event.origin !== window.location.origin) return;
-      if (event.data?.type === 'PAYPAL_ORDER_APPROVED' && event.data?.token) {
-        if (event.data.token === paypalOrderId || !paypalOrderId) {
-          handleCaptureOrder(event.data.token || paypalOrderId);
+
+      if (
+        event.data?.type === 'PAYPAL_ORDER_APPROVED' &&
+        event.data?.token
+      ) {
+        if (
+          event.data.token === paypalOrderId ||
+          !paypalOrderId
+        ) {
+          void handleCaptureOrder(
+            event.data.token || paypalOrderId
+          );
         }
       }
     };
+
     window.addEventListener('message', handleMessage);
-    return () => window.removeEventListener('message', handleMessage);
+
+    return () => {
+      window.removeEventListener('message', handleMessage);
+    };
   }, [paypalOrderId]);
 
-  // Step 1: Create real order on PayPal via backend
+  // STEP 1: Create the PayPal order through the backend.
   const handleStartPayPalFlow = async () => {
     if (isBlocked) {
       setErrorMessage(policyVerdict.primaryReason);
@@ -64,7 +90,9 @@ export const PayPalCheckoutModal: React.FC<PayPalCheckoutModalProps> = ({
     }
 
     if (isApprovalRequired && !userConfirmedApproval) {
-      setErrorMessage('Explicit human authorization is required before PayPal dispatch.');
+      setErrorMessage(
+        'Please confirm that you approve this purchase before continuing.'
+      );
       return;
     }
 
@@ -74,7 +102,9 @@ export const PayPalCheckoutModal: React.FC<PayPalCheckoutModalProps> = ({
 
       const res = await fetch('/api/paypal/create-order', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({
           productId: product.id,
           currency,
@@ -82,28 +112,38 @@ export const PayPalCheckoutModal: React.FC<PayPalCheckoutModalProps> = ({
       });
 
       const data = await res.json();
+
       if (!res.ok) {
-        throw new Error(data.error || 'Failed to initialize PayPal order.');
+        throw new Error(
+          data.error || 'We could not prepare your PayPal order.'
+        );
       }
 
       setPaypalOrderId(data.paypalOrderId);
       setApproveUrl(data.approveUrl);
       setStep('awaiting_approval');
     } catch (err: any) {
-      setErrorMessage(err.message || 'Payment initiation failed.');
+      setErrorMessage(
+        err.message || 'We could not start your payment. Please try again.'
+      );
       setStep('failed');
     }
   };
 
-  // Launch the genuine PayPal Sandbox window
+  // Open the PayPal approval page.
   const handleOpenPayPalPortal = () => {
     if (!approveUrl) return;
+
     setHasOpenedPayPal(true);
 
     const width = 550;
     const height = 720;
-    const left = window.screenX + (window.outerWidth - width) / 2;
-    const top = window.screenY + (window.outerHeight - height) / 2;
+
+    const left =
+      window.screenX + (window.outerWidth - width) / 2;
+
+    const top =
+      window.screenY + (window.outerHeight - height) / 2;
 
     const popup = window.open(
       approveUrl,
@@ -111,15 +151,23 @@ export const PayPalCheckoutModal: React.FC<PayPalCheckoutModalProps> = ({
       `width=${width},height=${height},left=${left},top=${top},scrollbars=yes,resizable=yes`
     );
 
-    if (!popup || popup.closed || typeof popup.closed === 'undefined') {
-      // If popup blocked, redirect directly
+    // If the browser blocks the popup, navigate directly.
+    if (
+      !popup ||
+      popup.closed ||
+      typeof popup.closed === 'undefined'
+    ) {
       window.location.href = approveUrl;
     }
   };
 
-  // Step 2: Authorize & Capture via Backend once buyer approves
-  const handleCaptureOrder = async (orderIdToCapture?: string) => {
-    const targetOrderId = orderIdToCapture || paypalOrderId;
+  // STEP 2: Verify and capture the approved PayPal order.
+  const handleCaptureOrder = async (
+    orderIdToCapture?: string
+  ) => {
+    const targetOrderId =
+      orderIdToCapture || paypalOrderId;
+
     if (!targetOrderId) return;
 
     try {
@@ -128,7 +176,9 @@ export const PayPalCheckoutModal: React.FC<PayPalCheckoutModalProps> = ({
 
       const res = await fetch('/api/paypal/capture-order', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({
           paypalOrderId: targetOrderId,
           productId: product.id,
@@ -136,253 +186,405 @@ export const PayPalCheckoutModal: React.FC<PayPalCheckoutModalProps> = ({
       });
 
       const data = await res.json();
-      if (!res.ok || data.captureStatus !== 'COMPLETED') {
-        if (data.error && data.error.includes('not been approved')) {
-          setErrorMessage('Payment has not yet been approved on PayPal. Please complete the authorization in the PayPal window, then try again.');
+
+      if (
+        !res.ok ||
+        data.captureStatus !== 'COMPLETED'
+      ) {
+        if (
+          data.error &&
+          data.error.includes('not been approved')
+        ) {
+          setErrorMessage(
+            'Your PayPal payment has not been approved yet. Please finish the approval in PayPal and try again.'
+          );
+
           setStep('awaiting_approval');
           return;
         }
-        throw new Error(data.error || 'PayPal capture could not be confirmed.');
+
+        throw new Error(
+          data.error || 'We could not confirm your payment.'
+        );
       }
 
+      // Only report success after the backend confirms capture.
       onPaymentSuccess(data.order);
     } catch (err: any) {
-      setErrorMessage(err.message || 'Payment capture failed.');
+      setErrorMessage(
+        err.message || 'We could not confirm your payment.'
+      );
+
       setStep('failed');
     }
   };
 
   return (
     <motion.div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm overflow-y-auto"
+      className="paypal-overlay"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
     >
       <motion.div
-        className="bg-white border border-slate-200 rounded-2xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative my-6"
-        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+        className="paypal-modal"
+        initial={{ opacity: 0, scale: 0.97, y: 18 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.97, y: 10 }}
-        transition={{ type: "spring", stiffness: 380, damping: 30 }}
+        exit={{ opacity: 0, scale: 0.98, y: 10 }}
+        transition={{
+          type: 'spring',
+          stiffness: 340,
+          damping: 30,
+        }}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="paypal-checkout-title"
       >
-        {/* Close Button */}
+        {/* CLOSE */}
         <button
+          type="button"
           onClick={onClose}
-          className="absolute top-5 right-5 p-1.5 rounded-lg text-slate-400 hover:text-slate-800 hover:bg-slate-100 transition-colors cursor-pointer"
+          className="paypal-close"
+          aria-label="Close checkout"
         >
-          <X className="w-5 h-5" />
+          <X size={21} />
         </button>
 
-        {/* Modal Header */}
-        <div className="flex items-center gap-2.5 pb-4 border-b border-slate-200 mb-5">
-          <div className="w-8 h-8 rounded-lg bg-blue-50 border border-blue-200 flex items-center justify-center">
-            <span className="font-mono font-bold text-blue-600 text-xs">PP</span>
+        {/* HEADER */}
+        <header className="paypal-header">
+          <div className="paypal-brand">
+            <img
+              src="https://cdn.simpleicons.org/paypal/003087"
+              alt="PayPal"
+              className="paypal-logo"
+            />
+            <span>PayPal</span>
           </div>
-          <div>
-            <h2 className="text-base font-bold text-slate-900 tracking-tight">
-              PayPal Sandbox Autonomous Checkout
-            </h2>
-            <span className="text-[11px] font-mono text-slate-500">
-              Verified Settlement Gate · Genuine Sandbox Flow
-            </span>
-          </div>
-        </div>
 
-        {/* Step: Review & Policy Verification */}
+          <div className="paypal-heading">
+            <h2 id="paypal-checkout-title">
+              {step === 'review' && 'Complete your order'}
+              {step === 'creating' && 'Preparing your order'}
+              {step === 'awaiting_approval' && 'Continue with PayPal'}
+              {step === 'capturing' && 'Confirming your payment'}
+              {step === 'failed' && 'Payment not completed'}
+            </h2>
+
+            <p>
+              {step === 'review'
+                ? 'Review your selection before checkout.'
+                : step === 'awaiting_approval'
+                ? 'Your order is ready for approval.'
+                : 'Your checkout with KRYVON.'}
+            </p>
+          </div>
+        </header>
+
+        {/* REVIEW STEP */}
         {step === 'review' && (
-          <div className="space-y-4">
-            {/* Selected Item Summary */}
-            <div className="flex items-center gap-3 p-3.5 bg-slate-50 border border-slate-200 rounded-xl">
-              <img
-                src={product.image}
-                alt={product.name}
-                referrerPolicy="no-referrer"
-                className="w-12 h-12 rounded-lg object-cover bg-slate-200 border border-slate-300 shrink-0"
-              />
-              <div className="flex-1 min-w-0">
-                <span className="text-xs font-mono uppercase text-cyan-700 font-bold block">{product.category}</span>
-                <h3 className="text-xs font-bold text-slate-900 truncate">{product.name}</h3>
-                <span className="text-sm font-mono font-extrabold text-slate-900 mt-0.5 block">
+          <div className="paypal-content">
+
+            <div className="paypal-section-label">
+              YOUR SELECTION
+            </div>
+
+            <div className="paypal-product">
+              <div className="paypal-product-image-wrap">
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  referrerPolicy="no-referrer"
+                  className="paypal-product-image"
+                />
+              </div>
+
+              <div className="paypal-product-info">
+                <span className="paypal-category">
+                  {product.category}
+                </span>
+
+                <h3>{product.name}</h3>
+
+                <strong className="paypal-product-price">
+                  {formatPrice(product.priceINR, currency)}
+                </strong>
+              </div>
+            </div>
+
+            {/* ORDER SUMMARY */}
+            <div className="paypal-summary">
+              <div className="paypal-section-label">
+                ORDER SUMMARY
+              </div>
+
+              <div className="paypal-summary-row">
+                <span>Product total</span>
+                <span>
                   {formatPrice(product.priceINR, currency)}
                 </span>
               </div>
+
+              <div className="paypal-summary-row paypal-total-row">
+                <strong>Total</strong>
+                <strong>
+                  {formatPrice(
+                    policyVerdict.orderTotalINR,
+                    currency
+                  )}
+                </strong>
+              </div>
             </div>
 
-            {/* Spending Intelligence Verdict Notice */}
+            {/* SPENDING POLICY */}
             <div
-              className={`p-4 rounded-xl border text-xs space-y-2 ${
+              className={`paypal-policy ${
                 policyVerdict.status === 'ALLOWED'
-                  ? 'bg-emerald-50/80 border-emerald-300'
+                  ? 'paypal-policy-allowed'
                   : isApprovalRequired
-                  ? 'bg-amber-50/80 border-amber-300'
-                  : 'bg-rose-50/80 border-rose-300'
+                  ? 'paypal-policy-review'
+                  : 'paypal-policy-blocked'
               }`}
             >
-              <div className="flex items-center justify-between font-bold">
-                <div className="flex items-center gap-1.5 font-mono">
-                  {policyVerdict.status === 'ALLOWED' ? (
-                    <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                  ) : (
-                    <AlertTriangle className="w-4 h-4 text-amber-600" />
-                  )}
-                  <span className={policyVerdict.status === 'ALLOWED' ? 'text-emerald-900' : 'text-amber-900'}>
-                    Policy Gate: {policyVerdict.status.replace('_', ' ')}
-                  </span>
-                </div>
-                <span className="font-mono text-[10px] text-slate-500">
-                  Total: {formatPrice(policyVerdict.orderTotalINR, currency)}
-                </span>
+              <div className="paypal-policy-heading">
+                {policyVerdict.status === 'ALLOWED' ? (
+                  <ShieldCheck size={18} />
+                ) : isApprovalRequired ? (
+                  <AlertTriangle size={18} />
+                ) : (
+                  <AlertCircle size={18} />
+                )}
+
+                <strong>
+                  {policyVerdict.status === 'ALLOWED'
+                    ? 'Within your spending limit'
+                    : isApprovalRequired
+                    ? 'Your approval is required'
+                    : 'This purchase is not allowed'}
+                </strong>
               </div>
-              <p className="text-slate-700 leading-relaxed text-[11px]">
-                {policyVerdict.primaryReason}
-              </p>
+
+              <p>{policyVerdict.primaryReason}</p>
             </div>
 
-            {/* Approval Checkbox if required */}
+            {/* MANUAL APPROVAL */}
             {isApprovalRequired && (
-              <div className="p-3 bg-amber-50/50 border border-amber-200 rounded-xl">
-                <label className="flex items-start gap-2.5 cursor-pointer select-none">
-                  <input
-                    type="checkbox"
-                    checked={userConfirmedApproval}
-                    onChange={(e) => setUserConfirmedApproval(e.target.checked)}
-                    className="mt-0.5 rounded border-slate-300 text-amber-600 focus:ring-amber-500 cursor-pointer"
-                  />
-                  <span className="text-xs text-amber-950 font-medium leading-relaxed">
-                    I explicitly authorize this autonomous purchase exceeding my automatic clearance threshold.
-                  </span>
-                </label>
-              </div>
+              <label className="paypal-approval">
+                <input
+                  type="checkbox"
+                  checked={userConfirmedApproval}
+                  onChange={(e) => {
+                    setUserConfirmedApproval(e.target.checked);
+                    setErrorMessage('');
+                  }}
+                />
+
+                <span>
+                  I have reviewed this purchase and approve
+                  proceeding to PayPal.
+                </span>
+              </label>
             )}
 
-            {/* Disclaimers & Trigger */}
-            <div className="pt-2 space-y-2">
-              <button
-                type="button"
-                onClick={handleStartPayPalFlow}
-                disabled={isBlocked || (isApprovalRequired && !userConfirmedApproval)}
-                className="w-full py-3 px-4 rounded-xl font-bold text-xs bg-[#0070ba] hover:bg-[#005ea6] text-white transition-all flex items-center justify-center gap-2 shadow-md shadow-blue-500/20 active:scale-98 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
-              >
-                <CreditCard className="w-4 h-4" />
-                <span>Launch PayPal Sandbox Authorization</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
-              <div className="mt-2 text-center text-[10px] font-mono text-slate-400">
-                Sandboxed payment environment · Genuine PayPal approval flow
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Step: Creating order on PayPal backend */}
-        {step === 'creating' && (
-          <div className="py-10 text-center space-y-4">
-            <Loader2 className="w-8 h-8 text-cyan-600 animate-spin mx-auto" />
-            <h3 className="text-sm font-bold text-slate-900">Creating PayPal Sandbox Order...</h3>
-            <p className="text-xs text-slate-500 max-w-xs mx-auto">
-              Registering authenticated purchase unit and obtaining genuine approval token.
-            </p>
-          </div>
-        )}
-
-        {/* Step: Awaiting Approval on genuine PayPal Sandbox */}
-        {step === 'awaiting_approval' && (
-          <div className="space-y-4">
-            <div className="p-4 rounded-xl bg-slate-50 border border-blue-200">
-              <div className="flex items-center justify-between text-xs pb-2 border-b border-slate-200">
-                <span className="font-mono text-blue-700 font-bold">PayPal Sandbox Token</span>
-                <span className="text-slate-700 font-mono text-[11px] font-semibold">{paypalOrderId}</span>
-              </div>
-              <div className="py-3 text-xs space-y-2">
-                <div className="flex justify-between">
-                  <span className="text-slate-500">Merchant:</span>
-                  <span className="text-slate-900 font-medium">KRYVON Autonomous Commerce</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-500">Item:</span>
-                  <span className="text-slate-900 font-medium truncate max-w-[200px]">{product.name}</span>
-                </div>
-                <div className="flex justify-between font-bold text-sm pt-2 border-t border-slate-200 text-slate-900">
-                  <span>Total Amount:</span>
-                  <span className="text-cyan-700 font-mono">{formatPrice(product.priceINR, currency)}</span>
-                </div>
-              </div>
-            </div>
-
+            {/* ERROR */}
             {errorMessage && (
-              <div className="flex items-start gap-2 p-3 bg-amber-50 border border-amber-200 rounded-lg text-xs text-amber-800">
-                <AlertCircle className="w-4 h-4 shrink-0 text-amber-600 mt-0.5" />
+              <div className="paypal-error">
+                <AlertCircle size={16} />
                 <span>{errorMessage}</span>
               </div>
             )}
 
-            <div className="space-y-2.5">
-              <button
-                type="button"
-                onClick={handleOpenPayPalPortal}
-                className="w-full py-3 px-4 rounded-xl font-bold text-xs bg-[#0070ba] hover:bg-[#005ea6] text-white transition-all flex items-center justify-center gap-2 shadow-md shadow-blue-500/20 active:scale-98 cursor-pointer"
-              >
-                <ExternalLink className="w-4 h-4" />
-                <span>{hasOpenedPayPal ? 'Reopen PayPal Sandbox Window' : 'Sign In & Approve on PayPal Sandbox'}</span>
-              </button>
+            {/* CONTINUE */}
+            <button
+              type="button"
+              onClick={handleStartPayPalFlow}
+              disabled={
+                isBlocked ||
+                (isApprovalRequired &&
+                  !userConfirmedApproval)
+              }
+              className="paypal-primary-button"
+            >
+              <span>Continue with PayPal</span>
+              <ArrowRight size={17} />
+            </button>
 
-              <button
-                type="button"
-                onClick={() => handleCaptureOrder()}
-                className="w-full py-3 px-4 rounded-xl font-bold text-xs bg-emerald-600 hover:bg-emerald-500 text-white transition-all flex items-center justify-center gap-2 shadow-md shadow-emerald-600/20 active:scale-98 cursor-pointer"
-              >
-                <CheckCircle2 className="w-4 h-4" />
-                <span>I Have Approved on PayPal — Complete Capture</span>
-              </button>
-            </div>
-
-            <p className="text-[11px] text-slate-500 text-center leading-relaxed">
-              Log into your PayPal Sandbox buyer account in the opened window, review and click <strong>Pay Now</strong> or <strong>Continue</strong>, then click <strong>Complete Capture</strong> above.
+            <p className="paypal-footnote">
+              You'll review and approve your payment on PayPal.
+              This checkout currently uses the PayPal Sandbox.
             </p>
           </div>
         )}
 
-        {/* Step: Capturing */}
+        {/* CREATING ORDER */}
+        {step === 'creating' && (
+          <div className="paypal-state">
+            <Loader2
+              className="paypal-spinner"
+              size={34}
+            />
+
+            <h3>Preparing your order</h3>
+
+            <p>
+              We're connecting to PayPal and setting up
+              your payment. Please wait a moment.
+            </p>
+          </div>
+        )}
+
+        {/* WAITING FOR PAYPAL APPROVAL */}
+        {step === 'awaiting_approval' && (
+          <div className="paypal-content">
+
+            <div className="paypal-section-label">
+              ORDER DETAILS
+            </div>
+
+            <div className="paypal-product">
+              <div className="paypal-product-image-wrap">
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  referrerPolicy="no-referrer"
+                  className="paypal-product-image"
+                />
+              </div>
+
+              <div className="paypal-product-info">
+                <span className="paypal-category">
+                  {product.category}
+                </span>
+
+                <h3>{product.name}</h3>
+
+                <strong className="paypal-product-price">
+                  {formatPrice(product.priceINR, currency)}
+                </strong>
+              </div>
+            </div>
+
+            <div className="paypal-confirmation">
+              <div className="paypal-summary-row">
+                <span>Order reference</span>
+                <span className="paypal-order-id">
+                  {paypalOrderId}
+                </span>
+              </div>
+
+              <div className="paypal-summary-row paypal-total-row">
+                <strong>Amount</strong>
+                <strong>
+                  {formatPrice(
+                    policyVerdict.orderTotalINR,
+                    currency
+                  )}
+                </strong>
+              </div>
+            </div>
+
+            {errorMessage && (
+              <div className="paypal-error">
+                <AlertCircle size={16} />
+                <span>{errorMessage}</span>
+              </div>
+            )}
+
+            <button
+              type="button"
+              onClick={handleOpenPayPalPortal}
+              className="paypal-primary-button"
+            >
+              <ExternalLink size={17} />
+
+              <span>
+                {hasOpenedPayPal
+                  ? 'Open PayPal again'
+                  : 'Continue to PayPal'}
+              </span>
+
+              <ArrowRight size={17} />
+            </button>
+
+            <button
+              type="button"
+              onClick={() => handleCaptureOrder()}
+              className="paypal-secondary-button"
+            >
+              <CheckCircle2 size={17} />
+              I've approved the payment
+            </button>
+
+            <p className="paypal-footnote">
+              Sign in to your PayPal Sandbox buyer account,
+              review the payment and approve it. Then return
+              here to confirm your order.
+            </p>
+          </div>
+        )}
+
+        {/* CAPTURING */}
         {step === 'capturing' && (
-          <div className="py-10 text-center space-y-4">
-            <Loader2 className="w-8 h-8 text-emerald-600 animate-spin mx-auto" />
-            <h3 className="text-sm font-bold text-slate-900">Verifying PayPal Approval & Capture...</h3>
-            <p className="text-xs text-slate-500 max-w-xs mx-auto">
-              Connecting with PayPal REST API to verify approved status, execute capture, and write to immutable order ledger.
+          <div className="paypal-state">
+            <Loader2
+              className="paypal-spinner"
+              size={34}
+            />
+
+            <h3>Confirming your payment</h3>
+
+            <p>
+              We're checking your PayPal approval and
+              confirming the transaction. Please keep
+              this window open.
             </p>
           </div>
         )}
 
-        {/* Step: Failed */}
+        {/* FAILED */}
         {step === 'failed' && (
-          <div className="py-6 text-center space-y-4">
-            <div className="w-10 h-10 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center mx-auto">
-              <X className="w-5 h-5" />
+          <div className="paypal-state">
+            <div className="paypal-failed-icon">
+              <X size={23} />
             </div>
-            <h3 className="text-sm font-bold text-slate-900">Payment Unsuccessful</h3>
-            <p className="text-xs text-rose-700 bg-rose-50 border border-rose-200 p-3 rounded-lg text-left">
-              {errorMessage || 'Payment could not be verified by the PayPal backend gateway.'}
+
+            <h3>We couldn't complete your payment</h3>
+
+            <p className="paypal-failed-message">
+              {errorMessage ||
+                'Your payment could not be confirmed. Please try again.'}
             </p>
-            <div className="flex gap-2 justify-center">
+
+            <div className="paypal-state-actions">
               <button
                 type="button"
-                onClick={() => setStep('review')}
-                className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-xs font-semibold text-white rounded-lg transition-colors cursor-pointer"
+                onClick={() => {
+                  setErrorMessage('');
+                  setStep('review');
+                }}
+                className="paypal-primary-button"
               >
-                Retry Checkout
+                <span>Try again</span>
+                <ArrowRight size={17} />
               </button>
+
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-xs font-medium text-slate-700 rounded-lg transition-colors cursor-pointer"
+                className="paypal-secondary-button"
               >
                 Cancel
               </button>
             </div>
           </div>
         )}
+
+        {/* FOOTER */}
+        <footer className="paypal-footer">
+          <Lock size={13} />
+          <span>Payments are processed securely by PayPal</span>
+        </footer>
+
       </motion.div>
     </motion.div>
   );
