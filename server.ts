@@ -1,4 +1,4 @@
-
+﻿
 import express, { Request, Response } from 'express';
 import dotenv from 'dotenv';
 import path from 'path';
@@ -532,7 +532,7 @@ app.post(
       if (genAI) {
         const prompt = `You are KRYVON's Autonomous Shopping Agent.
 The user issued this shopping mission: "${cleanQuery}".
-User max budget: ₹${parsedBudget}.
+User max budget: â‚¹${parsedBudget}.
 User priority: "${cleanPriority}".
 
 Use only this authentic product catalogue:
@@ -670,8 +670,8 @@ Return valid JSON only, matching this structure:
 
             const reason =
               product.priceINR <= parsedBudget
-                ? `Within your ₹${parsedBudget.toLocaleString('en-IN')} budget at ₹${product.priceINR.toLocaleString('en-IN')}. Rating: ${product.rating}★.`
-                : `Exceeds your budget by ₹${(
+                ? `Within your â‚¹${parsedBudget.toLocaleString('en-IN')} budget at â‚¹${product.priceINR.toLocaleString('en-IN')}. Rating: ${product.rating}â˜….`
+                : `Exceeds your budget by â‚¹${(
                     product.priceINR - parsedBudget
                   ).toLocaleString('en-IN')}; consider it only if its features justify the difference.`;
 
@@ -684,7 +684,7 @@ Return valid JSON only, matching this structure:
         ).sort((a, b) => b.matchScore - a.matchScore);
 
         agentResponsePayload = {
-          missionSummary: `Evaluated "${cleanQuery}" against the product catalogue with a ₹${parsedBudget.toLocaleString('en-IN')} budget and ${cleanPriority} priority.`,
+          missionSummary: `Evaluated "${cleanQuery}" against the product catalogue with a â‚¹${parsedBudget.toLocaleString('en-IN')} budget and ${cleanPriority} priority.`,
           categoryIdentified:
             queryLower.includes('headphone') ||
             queryLower.includes('sound')
@@ -819,12 +819,12 @@ Return valid JSON only:
             {
               category: 'Value for Money',
               winnerId: sortedByPrice[0].id,
-              rationale: `${sortedByPrice[0].name} has the lowest listed price at ₹${sortedByPrice[0].priceINR.toLocaleString('en-IN')}.`
+              rationale: `${sortedByPrice[0].name} has the lowest listed price at â‚¹${sortedByPrice[0].priceINR.toLocaleString('en-IN')}.`
             },
             {
               category: 'Customer Satisfaction',
               winnerId: sortedByRating[0].id,
-              rationale: `${sortedByRating[0].name} has the highest listed rating at ${sortedByRating[0].rating}★.`
+              rationale: `${sortedByRating[0].name} has the highest listed rating at ${sortedByRating[0].rating}â˜….`
             }
           ],
           recommendationSummary: `Choose ${sortedByPrice[0].name} for the lowest price, or consider ${sortedByRating[0].name} for its higher rating.`
@@ -1393,6 +1393,74 @@ app.post(
       const paypalData = captureResult.data;
       const capture = getPayPalCapture(paypalData);
 
+      // Log the exact reason whenever PayPal returns a pending capture.
+      // This is diagnostic only: a pending payment is never treated as completed.
+      if (capture?.status === 'PENDING') {
+        console.warn('[PayPal] Pending capture details:', {
+          paypalOrderId,
+          captureId: capture.id ?? null,
+          captureStatus: capture.status,
+          pendingReason: capture.status_details?.reason ?? null,
+          statusDetails: capture.status_details ?? null,
+          captureAmount: capture.amount ?? null,
+          captureCreateTime: capture.create_time ?? null,
+          captureUpdateTime: capture.update_time ?? null,
+          sellerProtectionStatus:
+            capture.seller_protection?.status ?? null
+        });
+      }
+
+      // Log the exact reason whenever PayPal returns a pending capture.
+      // This is diagnostic only: a pending payment is never treated as completed.
+      if (capture?.status === 'PENDING') {
+        console.warn('[PayPal] Pending capture details:', {
+          paypalOrderId,
+          captureId: capture.id ?? null,
+          captureStatus: capture.status,
+          pendingReason: capture.status_details?.reason ?? null,
+          statusDetails: capture.status_details ?? null,
+          captureAmount: capture.amount ?? null,
+          captureCreateTime: capture.create_time ?? null,
+          captureUpdateTime: capture.update_time ?? null,
+          sellerProtectionStatus:
+            capture.seller_protection?.status ?? null
+        });
+      }
+
+      // Log the exact reason whenever PayPal returns a pending capture.
+      // This is diagnostic only: a pending payment is never treated as completed.
+      if (capture?.status === 'PENDING') {
+        console.warn('[PayPal] Pending capture details:', {
+          paypalOrderId,
+          captureId: capture.id ?? null,
+          captureStatus: capture.status,
+          pendingReason: capture.status_details?.reason ?? null,
+          statusDetails: capture.status_details ?? null,
+          captureAmount: capture.amount ?? null,
+          captureCreateTime: capture.create_time ?? null,
+          captureUpdateTime: capture.update_time ?? null,
+          sellerProtectionStatus:
+            capture.seller_protection?.status ?? null
+        });
+      }
+
+      // Log the exact reason whenever PayPal returns a pending capture.
+      // This is diagnostic only: a pending payment is never treated as completed.
+      if (capture?.status === 'PENDING') {
+        console.warn('[PayPal] Pending capture details:', {
+          paypalOrderId,
+          captureId: capture.id ?? null,
+          captureStatus: capture.status,
+          pendingReason: capture.status_details?.reason ?? null,
+          statusDetails: capture.status_details ?? null,
+          captureAmount: capture.amount ?? null,
+          captureCreateTime: capture.create_time ?? null,
+          captureUpdateTime: capture.update_time ?? null,
+          sellerProtectionStatus:
+            capture.seller_protection?.status ?? null
+        });
+      }
+
       const verification = verifyPayPalCapture(
         paypalData,
         capture,
@@ -1666,3 +1734,7 @@ startServer().catch((error) => {
 
   process.exit(1);
 });
+
+
+
+
