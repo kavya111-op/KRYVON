@@ -1,4 +1,4 @@
-﻿
+
 import express, { Request, Response } from 'express';
 import dotenv from 'dotenv';
 import path from 'path';
@@ -1392,57 +1392,6 @@ app.post(
 
       const paypalData = captureResult.data;
       const capture = getPayPalCapture(paypalData);
-
-      // Log the exact reason whenever PayPal returns a pending capture.
-      // This is diagnostic only: a pending payment is never treated as completed.
-      if (capture?.status === 'PENDING') {
-        console.warn('[PayPal] Pending capture details:', {
-          paypalOrderId,
-          captureId: capture.id ?? null,
-          captureStatus: capture.status,
-          pendingReason: capture.status_details?.reason ?? null,
-          statusDetails: capture.status_details ?? null,
-          captureAmount: capture.amount ?? null,
-          captureCreateTime: capture.create_time ?? null,
-          captureUpdateTime: capture.update_time ?? null,
-          sellerProtectionStatus:
-            capture.seller_protection?.status ?? null
-        });
-      }
-
-      // Log the exact reason whenever PayPal returns a pending capture.
-      // This is diagnostic only: a pending payment is never treated as completed.
-      if (capture?.status === 'PENDING') {
-        console.warn('[PayPal] Pending capture details:', {
-          paypalOrderId,
-          captureId: capture.id ?? null,
-          captureStatus: capture.status,
-          pendingReason: capture.status_details?.reason ?? null,
-          statusDetails: capture.status_details ?? null,
-          captureAmount: capture.amount ?? null,
-          captureCreateTime: capture.create_time ?? null,
-          captureUpdateTime: capture.update_time ?? null,
-          sellerProtectionStatus:
-            capture.seller_protection?.status ?? null
-        });
-      }
-
-      // Log the exact reason whenever PayPal returns a pending capture.
-      // This is diagnostic only: a pending payment is never treated as completed.
-      if (capture?.status === 'PENDING') {
-        console.warn('[PayPal] Pending capture details:', {
-          paypalOrderId,
-          captureId: capture.id ?? null,
-          captureStatus: capture.status,
-          pendingReason: capture.status_details?.reason ?? null,
-          statusDetails: capture.status_details ?? null,
-          captureAmount: capture.amount ?? null,
-          captureCreateTime: capture.create_time ?? null,
-          captureUpdateTime: capture.update_time ?? null,
-          sellerProtectionStatus:
-            capture.seller_protection?.status ?? null
-        });
-      }
 
       // Log the exact reason whenever PayPal returns a pending capture.
       // This is diagnostic only: a pending payment is never treated as completed.
